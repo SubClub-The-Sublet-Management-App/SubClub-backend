@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
 const addressSchema = require('./addressModel');
 
 
-const userSchema = new mongoose.Schema({
-    first_name: {
+const userSchema = new Schema({
+    firstName: {
         type: String,
         required: true
     },
-    last_name: {
+    lastName: {
         type: String,
         required: true
     },
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone_number: {
+    phoneNumber: {
         type: String,
         required: false
     },
