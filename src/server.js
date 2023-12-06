@@ -20,6 +20,9 @@ const roomRoutes = require('./routes/RoomRouter');
 app.use('/rooms', roomRoutes);
 
 
+// import user routes
+const userRoutes = require('./routes/UserRouter');
+app.use('/users', userRoutes);
 
 module.exports = {
 app}
