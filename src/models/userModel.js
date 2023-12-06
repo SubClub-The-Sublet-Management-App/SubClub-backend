@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
 
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
     firstName: {
         type: String,
         required: true
@@ -54,4 +54,4 @@ const userSchema = new Schema({
 
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', UserSchema);

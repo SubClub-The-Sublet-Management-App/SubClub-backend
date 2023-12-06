@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 
-const occupantSchema = new Schema({
+const OccupantSchema = new Schema({
     firstName: {
        type: String,
        required: true,
@@ -69,4 +69,4 @@ const occupantSchema = new Schema({
     },
 });
 
-module.exports = mongoose.model('Occupant', occupantSchema);
+module.exports = mongoose.model('Occupant', OccupantSchema);

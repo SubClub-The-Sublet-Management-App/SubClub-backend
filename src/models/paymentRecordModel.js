@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const RoomAssignment = require('./roomAssignmentModel'); 
+const RoomAssignment = require('./RoomAssignmentModel'); 
 
 
-const paymentRecordSchema = new Schema({
+const PaymentRecordSchema = new Schema({
 
     // Room Assignment reference
     roomAssignment: { 
@@ -26,4 +26,4 @@ const paymentRecordSchema = new Schema({
     receiptStatus: String
 });
 
-module.exports = mongoose.model('PaymentRecord', paymentRecordSchema);
+module.exports = mongoose.model('PaymentRecord', PaymentRecordSchema);
