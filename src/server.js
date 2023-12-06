@@ -1,3 +1,5 @@
+// Server configuration happens in server.js
+
 const express = require('express');
 
 // make a server instance 
@@ -11,6 +13,14 @@ app.get("/", (request, response) => {
 	});
 });
 
+
+
+// import room routes
+const roomRoutes = require('./routes/RoomRouter');
+app.use('/rooms', roomRoutes);
+
+
+
 module.exports = {
-	app
-}
+app}
+
