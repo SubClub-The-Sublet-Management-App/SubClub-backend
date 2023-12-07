@@ -2,7 +2,7 @@ const User = require('../models/UserModel');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const validateFields = require('../utils/validateFields');
-const { comparePassword, generateJwt } = require('../utils/AuthFunction'); 
+const { comparePassword, generateJwt } = require('../utils/authHelpers'); 
 
 
 // Desc: Register a new user
@@ -70,7 +70,7 @@ async function login(req, res) {
 
         // Find the user by email
         const user = await User.findOne({ email });
-        console.log(user);
+
         if (!user) {
             return res.status(400).json({ message: 'Invalid email' });
         }
