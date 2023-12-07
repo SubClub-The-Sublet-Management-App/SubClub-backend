@@ -1,7 +1,9 @@
 const User = require('../models/UserModel');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const validateFields = require('../utils/validateFields');
+const { comparePassword, generateJwt } = require('../utils/AuthFunction'); 
+
 
 // Desc: Register a new user
 
@@ -30,15 +32,13 @@ async function signup(req, res) {
             return res.status(400).json({ message: 'Email already in use' });
         }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create the new user
         const user = new User({
             firstName,
             lastName,
             email,
-            password: hashedPassword,
+            password,
         });
 
         await user.save();
@@ -51,10 +51,50 @@ async function signup(req, res) {
         res.status(201).json({ message: 'User registered successfully', userObj });
     } catch (error) {
         console.error(error); // Log the error
-        res.status(500).json({ message: 'Registration failed' }); // Send a generic error message
+        res.status(500).json({ message: 'Registration failed' }); 
     }
 }
 
+
+async function login(req, res) {
+    try {
+        const { email, password } = req.body;
+
+        // Validate the user's input
+        const requiredFields = ['email', 'password'];
+        const errorMessage = validateFields(requiredFields, req);
+
+        if (errorMessage) {
+            return res.status(400).json({ message: errorMessage });
+        }
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+        console.log(user);
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email' });
+        }
+
+        // Check if the password is correct
+        const isPasswordValid = await comparePassword(password, user.password);
+        
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid password' });
+        }
+
+        // Generate a JWT
+        const token = generateJwt(user._id);
+
+        // Send the response
+        res.status(200).json({ message: 'Logged in successfully', token });
+    } catch (error) {
+        console.error(error); // Log the error
+        res.status(500).json({ message: 'Login failed' }); // Send a generic error message
+    }
+};
+
 module.exports = {
     signup,
+    login,
 };
+

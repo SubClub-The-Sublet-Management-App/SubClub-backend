@@ -8,8 +8,9 @@ const {
     deleteUserById,
 } = require('../controllers/UserController');
 
-// POST localhost:3000/users/
-router.post('/', createUser);
+const {signup, login} = require('../controllers/AuthController');
+
+// USER ROUTES
 
 // GET localhost:3000/users/
 router.get('/', getAllUsers);
@@ -22,6 +23,16 @@ router.put('/:id', updateUserById);
 
 // DELETE localhost:3000/users/:id
 router.delete('/:id', deleteUserById);
+
+
+// AUTH ROUTES
+
+// POST localhost:3000/users/signup
+router.post('/signup', signup);
+
+
+// POST localhost:3000/users/login
+router.post('/login', login);
 
 
 module.exports = router;
