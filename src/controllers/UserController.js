@@ -1,34 +1,7 @@
 // import Express library
 const express = require('express');
-const { comparePassword, generateJwt } = require('../utils/userAuthVerifier');
 const User = require('../models/UserModel')
 
-// Create a new user
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-
-const createUser = async (req, res) => {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-        const newUser = await User.create({
-            ...req.body,
-            password: hashedPassword,
-        });
-    // Create a copy of the user object and delete the password from it
-    const userResponse = newUser.toObject();
-    delete userResponse.password;
-
-    res.status(201).json({
-        message: "Successfully created a new user",
-        data: userResponse,
-    });
-    } catch (error) {
-    res.status(500).json({
-        message: "Unable to create a new user",
-        error: error.message,
-    });
-    }
-};
 // Get all users
 const getAllUsers = async (req, res) => {
     try {
@@ -97,7 +70,7 @@ const deleteUserById = async (req, res) => {
 };
 
 module.exports = {
-    createUser,
+   
     getAllUsers,
     getUserById,
     updateUserById,
