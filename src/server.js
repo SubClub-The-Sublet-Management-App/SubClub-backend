@@ -24,6 +24,11 @@ app.use('/rooms', roomRoutes);
 const userRoutes = require('./routes/UserRouter');
 app.use('/users', userRoutes);
 
+// import auth routes
+const userRoutes = require('./routes/AuthRouter');
+app.use('/auth', userRoutes);
+
+
 module.exports = {
 app}
 
