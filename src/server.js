@@ -13,8 +13,6 @@ app.get("/", (request, response) => {
 	});
 });
 
-
-
 // import room routes
 const roomRoutes = require('./routes/roomRouter');
 app.use('/rooms', roomRoutes);

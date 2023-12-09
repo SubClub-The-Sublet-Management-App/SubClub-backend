@@ -17,8 +17,6 @@ const authMiddleware = async (req, res, next) => {
 
         // Find the user
         const user = await User.findById(decoded.userId);
-        console.log(user);
-        console.log(decoded.id);
         if (!user) {
             return res.status(401).json({ message: 'User not found, authorization denied' });
         }
