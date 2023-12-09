@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
@@ -9,7 +8,8 @@ const {
     getRoomByName, 
     updateRoom, 
     deleteRoom 
-    } = require('../controllers/RoomController');
+} = require('../controllers/roomController');
+
 
 // POST localhost:3000/rooms/
 router.post('/', authMiddleware, createRoom);

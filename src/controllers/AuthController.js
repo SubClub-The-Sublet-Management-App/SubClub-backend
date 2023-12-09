@@ -1,4 +1,4 @@
-const User = require('../models/UserModel');
+const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const validateFields = require('../utils/validateFields');
@@ -50,7 +50,6 @@ async function signup(req, res) {
         // Send the response
         res.status(201).json({ message: 'User registered successfully', userObj });
     } catch (error) {
-        console.error(error); // Log the error
         res.status(500).json({ message: 'Registration failed' }); 
     }
 }
@@ -88,7 +87,6 @@ async function login(req, res) {
         // Send the response
         res.status(200).json({ message: 'Logged in successfully', token });
     } catch (error) {
-        console.error(error); // Log the error
         res.status(500).json({ message: 'Login failed' }); // Send a generic error message
     }
 };
