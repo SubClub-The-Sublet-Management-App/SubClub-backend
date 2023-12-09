@@ -5,6 +5,7 @@ const roomSchema = new Schema({
   name: {
       type: String,
       required: true,
+      unique:true,
   },
   monthlyRentalPrice: {
       type: Number,

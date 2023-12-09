@@ -1,4 +1,3 @@
-
 const Room = require('../models/roomModel');
 
 // Create a new room
@@ -12,10 +11,19 @@ const createRoom = async (req, res) => {
         };
 
         const newRoom = await Room.create(roomData);
+
+        // Create a copy of the newRoom object
+        let roomObj = newRoom.toObject();
+
+        // Delete the user field from the copy
+        delete roomObj.user;
+
+        // Send the response
         res.json({
             message: "Successfully created a new room",
-            data: newRoom,
+            data: roomObj,
         });
+
     } catch (error) {
         res.status(500).json({
             message: "Unable to create a new room",
@@ -32,7 +40,7 @@ const getAllRooms = async (req, res) => {
         const userId = req.user._id;
 
         // Find all rooms that belong to the user
-        const allRooms = await Room.find({ user: userId });
+        const allRooms = await Room.find({ user: userId }).select('-user');
 
         res.json({
             message: "Successfully retrieved all rooms",
@@ -50,10 +58,11 @@ const getAllRooms = async (req, res) => {
 // GET localhost:3000/rooms/:id
 const getRoomById = async (req, res) => {
     try {
-        const room = await Room.findOne({ _id: req.params.id, user: req.user._id });
+        const room = await Room.findOne({ _id: req.params.id, user: req.user._id }).select('-user');
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
         }
+
         res.json({
             message: "Successfully retrieved the room by id",
             data: room,
@@ -67,13 +76,13 @@ const getRoomById = async (req, res) => {
 };
 
 // View a room by name
-// GET - localhost:3000/rooms/one/name/Room%1
+// GET - localhost:3000/rooms/one/name/room-1
 const getRoomByName = async (req, res) => {
     const { name } = req.params;
     const { _id: userId } = req.user;
 
     try {
-        const room = await Room.findOne({ name, user: userId });
+        const room = await Room.findOne({ name, user: userId }).select('-user');
 
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
@@ -84,7 +93,7 @@ const getRoomByName = async (req, res) => {
             data: room,
         });
     } catch (error) {
-        console.error(error); // Log the error for debugging purposes
+
         res.status(500).json({
             message: "Unable to retrieve the room by name",
             error: error.message,
@@ -96,7 +105,7 @@ const getRoomByName = async (req, res) => {
 // UPDATE - localhost:3000/rooms/:id
 const updateRoom = async (req, res) => {
     try {
-        const room = await Room.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, req.body, { new: true });
+        const room = await Room.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, req.body, { new: true }).select('-user');
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
         }
@@ -116,7 +125,7 @@ const updateRoom = async (req, res) => {
 //DELETE - localhost:3000/rooms/:id
 const deleteRoom = async (req, res) => {
     try {
-        const room = await Room.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+        const room = await Room.findOneAndDelete({ _id: req.params.id, user: req.user._id }).select('-user');
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
         }
