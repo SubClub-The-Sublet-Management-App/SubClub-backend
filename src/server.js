@@ -25,9 +25,12 @@ const userRoutes = require('./routes/userRouter');
 app.use('/users', userRoutes);
 
 // import auth routes
-const userRoutes = require('./routes/authRouter');
-app.use('/auth', userRoutes);
+const authRoutes = require('./routes/authRouter');
+app.use('/auth', authRoutes);
 
+// import occupant routes
+const occupantRoutes = require('./routes/occupantRouter');
+app.use('/occupants', occupantRoutes);
 
 module.exports = {
 app}
