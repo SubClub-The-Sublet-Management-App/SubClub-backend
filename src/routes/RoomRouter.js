@@ -9,7 +9,7 @@ const {
     getRoomByName, 
     updateRoom, 
     deleteRoom 
-    } = require('../controllers/RoomController');
+    } = require('../controllers/roomController');
 
 // POST localhost:3000/rooms/
 router.post('/', authMiddleware, createRoom);

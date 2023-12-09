@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const Occupant = require('./OccupantModel');
-const Room = require('./RoomModel');
+const Occupant = require('./occupantModel');
+const Room = require('./roomModel');
 
 
-const RoomAssignmentSchema = new Schema({
+const roomAssignmentSchema = new Schema({
     // Room reference
     room: { 
         type: mongoose.Types.ObjectId, 
@@ -48,4 +48,4 @@ const RoomAssignmentSchema = new Schema({
     rentalAgreementStatus: String
 });
 
-module.exports = mongoose.model('RoomAssignment', RoomAssignmentSchema);
+module.exports = mongoose.model('RoomAssignment', roomAssignmentSchema);

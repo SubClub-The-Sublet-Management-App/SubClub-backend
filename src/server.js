@@ -16,16 +16,16 @@ app.get("/", (request, response) => {
 
 
 // import room routes
-const roomRoutes = require('./routes/RoomRouter');
+const roomRoutes = require('./routes/roomRouter');
 app.use('/rooms', roomRoutes);
 
 
 // import user routes
-const userRoutes = require('./routes/UserRouter');
+const userRoutes = require('./routes/userRouter');
 app.use('/users', userRoutes);
 
 // import auth routes
-const userRoutes = require('./routes/AuthRouter');
+const userRoutes = require('./routes/authRouter');
 app.use('/auth', userRoutes);
 
 

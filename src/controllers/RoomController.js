@@ -1,5 +1,5 @@
 
-const Room = require('../models/RoomModel');
+const Room = require('../models/roomModel');
 
 // Create a new room
 // POST localhost:3000/rooms/
