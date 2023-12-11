@@ -5,7 +5,7 @@ const {
     createOccupant,
     getAllOccupants,
     getOccupantById,
-    updateOccupant,
+    updateOccupantById,
     deleteOccupant,
 } = require('../controllers/occupantController');
 
@@ -20,7 +20,7 @@ router.get('/', authMiddleware, getAllOccupants);
 router.get('/:id', authMiddleware, getOccupantById);
 
 // PUT localhost:3000/occupants/:id
-router.put('/:id', authMiddleware, updateOccupant);
+router.patch('/:id', authMiddleware, updateOccupantById);
 
 // DELETE localhost:3000/occupants/:id
 router.delete('/:id', authMiddleware, deleteOccupant);

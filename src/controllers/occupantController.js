@@ -81,15 +81,21 @@ const getOccupantById = async (req, res) => {
 };
 
 
-// Update a occupant by id
-// UPDATE - localhost:3000/occupants/:id
-const updateOccupant = async (req, res) => {
+// Update an occupant by id
+// PUT localhost:3000/occupants/:id
+const updateOccupantById = async (req, res) => {
     try {
-        const occupant = await Occupant.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, req.body, { new: true }).select('-user');
+        const occupant = await Occupant.findOneAndUpdate(
+            { _id: req.params.id, user: req.user._id },
+            { $set: req.body },
+            { new: true, runValidators: true }
+        );
+
         if (!occupant) {
             return res.status(404).json({ message: "Occupant not found" });
         }
-        res.json({
+
+        res.status(200).json({
             message: "Successfully updated the occupant",
             data: occupant,
         });
@@ -121,10 +127,11 @@ const deleteOccupant = async (req, res) => {
     }
 };
 
+// Export the controller functions
 module.exports = {
     createOccupant,
     getAllOccupants,
     getOccupantById,
-    updateOccupant,
+    updateOccupantById,
     deleteOccupant,
 };

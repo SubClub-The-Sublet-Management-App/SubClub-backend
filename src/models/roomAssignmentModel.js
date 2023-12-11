@@ -17,35 +17,49 @@ const roomAssignmentSchema = new Schema({
         ref: 'Occupant' 
     }, 
 
+    // reference to the User
+    user: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User', // reference to the User model
+        required: true 
+    },
+
     // Agreement reference
 
-    agreement: {
-        startDate: { 
-            type: Date, 
-            required: true 
-        },  
-        endDate: { 
-            type: Date,
-            required: true 
-        },  
-        rentInclusions: { 
-            type: [String], 
-            required: true 
-        },
-        rentalPayment: { 
-            type: Number, 
-            required: true 
-        },
-        rentalPaymentFrequency: { 
-            type: String, 
-            required: true 
-        },
-        securityDeposit: { 
-            type: Number, 
-            required: true 
-        },
+    startDate: { 
+        type: Date, 
+        required: true 
+    },  
+    endDate: { 
+        type: Date,
+        required: true 
+    },  
+    rentInclusions: { 
+        type: [String], 
+        required: true 
     },
-    rentalAgreementStatus: String
+    rentalPayment: { 
+        type: Number, 
+        required: true 
+    },
+    rentalPaymentFrequency: { 
+        type: String, 
+        required: true 
+    },
+    securityDeposit: { 
+        type: Number, 
+        required: true 
+    },
+
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
+    isAssigned: {
+        type: Boolean,
+        default: true,
+    },
+    
 });
 
 module.exports = mongoose.model('RoomAssignment', roomAssignmentSchema);

@@ -10,6 +10,7 @@ const createRoom = async (req, res) => {
             user: req.user._id,
         };
 
+        // Create the new room
         const newRoom = await Room.create(roomData);
 
         // Create a copy of the newRoom object
@@ -19,7 +20,7 @@ const createRoom = async (req, res) => {
         delete roomObj.user;
 
         // Send the response
-        res.json({
+        res.status(201).json({
             message: "Successfully created a new room",
             data: roomObj,
         });
@@ -42,7 +43,7 @@ const getAllRooms = async (req, res) => {
         // Find all rooms that belong to the user
         const allRooms = await Room.find({ user: userId }).select('-user');
 
-        res.json({
+        res.status(200).json({
             message: "Successfully retrieved all rooms",
             data: allRooms,
         });
@@ -63,7 +64,7 @@ const getRoomById = async (req, res) => {
             return res.status(404).json({ message: "Room not found" });
         }
 
-        res.json({
+        res.status(200).json({
             message: "Successfully retrieved the room by id",
             data: room,
         });
@@ -105,11 +106,13 @@ const getRoomByName = async (req, res) => {
 // UPDATE - localhost:3000/rooms/:id
 const updateRoom = async (req, res) => {
     try {
-        const room = await Room.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, req.body, { new: true }).select('-user');
+        // Find the room by id and user id and update it
+        const room = await Room.findOneAndUpdate(
+            { _id: req.params.id, user: req.user._id }, req.body, { new: true }).select('-user');
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
         }
-        res.json({
+        res.status(200).json({
             message: "Successfully updated the room",
             data: room,
         });
@@ -129,9 +132,9 @@ const deleteRoom = async (req, res) => {
         if (!room) {
             return res.status(404).json({ message: "Room not found" });
         }
-        res.json({
+        res.status(200).json({
             message: "Successfully deleted the room",
-            deletedRoom: room,
+            data: room,
         });
     } catch (error) {
         res.status(500).json({
