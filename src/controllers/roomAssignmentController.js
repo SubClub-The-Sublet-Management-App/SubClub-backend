@@ -111,25 +111,6 @@ const updateRoomAssignmentById = async (req, res) => {
     }
 };
 
-// Delete a room assignment by id
-// DELETE localhost:3000/room-assignments/:id
-const deleteRoomAssignment = async (req, res) => {
-    try {
-        const roomAssignment = await RoomAssignment.findOneAndDelete({ _id: req.params.id, user: req.user._id }).select('-user');
-        if (!roomAssignment) {
-            return res.status(404).json({ message: "Room assignment not found" });
-        }
-        res.status(200).json({
-            message: "Successfully deleted the room assignment",
-            data: roomAssignment,
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "Unable to delete the room assignment",
-            error: error.message,
-        });
-    }
-};
 
 // Export the controller functions
 module.exports = {
@@ -137,7 +118,6 @@ module.exports = {
     getAllRoomAssignments,
     getRoomAssignmentById,
     updateRoomAssignmentById,
-    deleteRoomAssignment,
 };
 
 

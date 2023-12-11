@@ -9,7 +9,6 @@ const {
     getAllRoomAssignments,
     getRoomAssignmentById,
     updateRoomAssignmentById,
-    deleteRoomAssignment,
 } = require('../controllers/roomAssignmentController');
 
 // POST localhost:3000/room-assignments/
@@ -24,8 +23,7 @@ router.get('/:id', authMiddleware, getRoomAssignmentById);
 // PUT localhost:3000/room-assignments/:id
 router.patch('/:id', authMiddleware, updateRoomAssignmentById);
 
-// DELETE localhost:3000/room-assignments/:id
-router.delete('/:id', authMiddleware, deleteRoomAssignment);
+
 
 module.exports = router;
 
