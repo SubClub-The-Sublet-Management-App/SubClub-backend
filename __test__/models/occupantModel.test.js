@@ -50,6 +50,7 @@ describe('Occupant Model Test', () => {
                 lastName: 'Smith',
                 phoneNumber: '1122334455',
                 relationship: 'Friend',
+                email:'b-smith@mail.com'
             },
             user: user._id,
         };
@@ -64,8 +65,8 @@ describe('Occupant Model Test', () => {
         expect(savedOccupant.phoneNumber).toBe(occupantData.phoneNumber);
         expect(savedOccupant.dob).toEqual(occupantData.dob);
         expect(savedOccupant.occupation).toBe(occupantData.occupation);
-        expect(savedOccupant.emergencyContact).toEqual(occupantData.emergencyContact);
-        expect(savedOccupant.reference).toEqual(occupantData.reference);
+        expect(savedOccupant.emergencyContact.toObject()).toEqual(expect.objectContaining(occupantData.emergencyContact));
+        expect(savedOccupant.reference.toObject()).toEqual(expect.objectContaining(occupantData.reference));
         expect(savedOccupant.user.toString()).toBe(user._id.toString());
     });
 
@@ -106,6 +107,7 @@ describe('Occupant Model Test', () => {
                     lastName: 'Kelly',
                     phoneNumber: '1122334455',
                     relationship: 'Friend',
+                    email: 'timmy@mail.com'
                 },
                 user: user._id,
              });
@@ -130,6 +132,7 @@ describe('Occupant Model Test', () => {
                     lastName: 'Gwistic',
                     phoneNumber: '1122334455',
                     relationship: 'Friend',
+                    email: 'lynne@mail.com'
                 },
                 user: user._id,
              });
@@ -162,6 +165,7 @@ describe('Occupant Model Test', () => {
                 lastName: 'Smith',
                 phoneNumber: "1122334455",
                 relationship: 'Friend',
+                email:'bob-s@mail.com'
             },
             user: user._id,
          });
@@ -197,6 +201,7 @@ describe('Occupant Model Test', () => {
                     lastName: 'Kelly',
                     phoneNumber: '1122334455',
                     relationship: 'Friend',
+                    email: 't-kelly@mail.com'
                 },
                 user: user._id,
          });
@@ -227,6 +232,7 @@ describe('Occupant Model Test', () => {
                 lastName: 'Kelly',
                 phoneNumber: '1122334455',
                 relationship: 'Friend',
+                email: 't-t@mail.com'
             },
             user: user._id,
         });
@@ -257,6 +263,7 @@ describe('Occupant Model Test', () => {
                 lastName: 'Kelly',
                 phoneNumber: '1122334455',
                 relationship: 'Friend',
+                email: 'tiimy@mail.com'
             },
             user: user._id,
          });
