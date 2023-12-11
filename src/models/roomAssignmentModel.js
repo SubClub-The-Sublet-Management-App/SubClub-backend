@@ -17,6 +17,13 @@ const roomAssignmentSchema = new Schema({
         ref: 'Occupant' 
     }, 
 
+    // reference to the User
+    user: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User', // reference to the User model
+        required: true 
+    },
+
     // Agreement reference
 
     agreement: {
@@ -46,6 +53,8 @@ const roomAssignmentSchema = new Schema({
         },
     },
     rentalAgreementStatus: String
+    
 });
+
 
 module.exports = mongoose.model('RoomAssignment', roomAssignmentSchema);
