@@ -30,6 +30,10 @@ app.use('/auth', authRoutes);
 const occupantRoutes = require('./routes/occupantRouter');
 app.use('/occupants', occupantRoutes);
 
+// import room assignment routes
+const roomAssignmentRoutes = require('./routes/roomAssignmentRouter');
+app.use('/room-assignments', roomAssignmentRoutes);
+
 module.exports = {
 app}
 
