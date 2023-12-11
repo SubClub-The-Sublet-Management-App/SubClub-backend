@@ -52,7 +52,11 @@ const roomAssignmentSchema = new Schema({
             required: true 
         },
     },
-    rentalAgreementStatus: String
+    rentalAgreementStatus: {
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active',
+    },
     
 });
 
