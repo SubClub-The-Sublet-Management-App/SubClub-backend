@@ -9,7 +9,7 @@ describe('User Model Test', () => {
         // Conection to the DB
         await mongoose.connect(process.env.DB_URI);
     });
-    
+
     // save user id's to delete after test
     let createdUserIds = [];
 
@@ -87,6 +87,7 @@ describe('User Model Test', () => {
                 }
             });
             await user1.save();
+            createdUserIds.push(savedUser._id);
 
             const user2 = new User({ 
                 firstName: 'Ann',
