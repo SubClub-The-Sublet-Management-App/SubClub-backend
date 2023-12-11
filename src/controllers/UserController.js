@@ -1,6 +1,5 @@
 // import Express library
 const express = require('express');
-const Occupant = require('./occupantModel');
 const User = require('../models/userModel')
 
 // Get all users

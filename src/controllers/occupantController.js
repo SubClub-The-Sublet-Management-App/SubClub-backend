@@ -121,6 +121,7 @@ const deleteOccupant = async (req, res) => {
     }
 };
 
+// Export the controller functions
 module.exports = {
     createOccupant,
     getAllOccupants,
