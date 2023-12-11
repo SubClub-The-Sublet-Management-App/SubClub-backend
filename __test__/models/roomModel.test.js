@@ -31,7 +31,7 @@ describe('Room Model Test', () => {
     // Test for valid data
     it('create & save room successfully', async () => {
         const roomData = {
-            name: 'Room 101',
+            name: 'Room 1',
             monthlyRentalPrice: 500,
             description: 'A cozy room',
             content: ['Bed', 'Table', 'Chair'],
@@ -66,7 +66,7 @@ describe('Room Model Test', () => {
         let err;
         try {
             const room1 = new Room({ 
-                name: 'Room 103',
+                name: 'Room 2',
                 monthlyRentalPrice: 600,
                 description: 'A large room',
                 content: ['Bed', 'Table', 'Chair', 'Wardrobe'],
@@ -75,7 +75,7 @@ describe('Room Model Test', () => {
             await room1.save();
 
             const room2 = new Room({ 
-                name: 'Room 103',
+                name: 'Room 2',
                 monthlyRentalPrice: 700,
                 description: 'A small room',
                 content: ['Bed', 'Table'],
@@ -92,7 +92,7 @@ describe('Room Model Test', () => {
     // Test for invalid data type
     it('updates room successfully', async () => {
         const validRoom = new Room({ 
-            name: 'Room 104',
+            name: 'Room 3',
             monthlyRentalPrice: 500,
             description: 'A cozy room',
             content: ['Bed', 'Table', 'Chair'],
@@ -107,7 +107,7 @@ describe('Room Model Test', () => {
     // Test for delete operations
     it('deletes room successfully', async () => {
         const validRoom = new Room({
-            name: 'Room 106',
+            name: 'Room 4',
             monthlyRentalPrice: 500,
             description: 'A cozy room',
             content: ['Bed', 'Table', 'Chair'],
@@ -122,7 +122,7 @@ describe('Room Model Test', () => {
     // Test for read operations
     it('reads room successfully', async () => {
         const validRoom = new Room({ 
-            name: 'Room 107',
+            name: 'Room 5',
             monthlyRentalPrice: 500,
             description: 'A cozy room',
             content: ['Bed', 'Table', 'Chair'],
