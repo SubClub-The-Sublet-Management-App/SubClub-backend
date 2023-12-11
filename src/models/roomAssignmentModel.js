@@ -26,39 +26,36 @@ const roomAssignmentSchema = new Schema({
 
     // Agreement reference
 
-    agreement: {
-        startDate: { 
-            type: Date, 
-            required: true 
-        },  
-        endDate: { 
-            type: Date,
-            required: true 
-        },  
-        rentInclusions: { 
-            type: [String], 
-            required: true 
-        },
-        rentalPayment: { 
-            type: Number, 
-            required: true 
-        },
-        rentalPaymentFrequency: { 
-            type: String, 
-            required: true 
-        },
-        securityDeposit: { 
-            type: Number, 
-            required: true 
-        },
+    startDate: { 
+        type: Date, 
+        required: true 
+    },  
+    endDate: { 
+        type: Date,
+        required: true 
+    },  
+    rentInclusions: { 
+        type: [String], 
+        required: true 
     },
-    rentalAgreementStatus: {
-        type: String,
-        enum: ['active', 'inactive'],
-        default: 'active',
+    rentalPayment: { 
+        type: Number, 
+        required: true 
+    },
+    rentalPaymentFrequency: { 
+        type: String, 
+        required: true 
+    },
+    securityDeposit: { 
+        type: Number, 
+        required: true 
+    },
+
+    isRentalAgreementActive: {
+        type: Boolean,
+        default: true,
     },
     
 });
-
 
 module.exports = mongoose.model('RoomAssignment', roomAssignmentSchema);

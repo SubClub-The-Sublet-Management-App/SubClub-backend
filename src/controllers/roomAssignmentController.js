@@ -1,4 +1,5 @@
 const RoomAssignment = require('../models/roomAssignmentModel');
+const Room = require('../models/roomModel');
 
 // Create a new room assignment
 // POST - localhost:3000/room-assignments/
@@ -9,10 +10,9 @@ const createRoomAssignment = async (req, res) => {
             ...req.body,
             user: req.user._id,
         };
-        console.log(roomAssignmentData);
 
         // Check on db if room has already been assigned
-        const existingRoomAssignment = await RoomAssignment.findOne({ room: roomAssignmentData.room });
+        const existingRoomAssignment = await RoomAssignment.findOne({ room: roomAssignmentData.room, isRentalAgreementActive: true});
         if (existingRoomAssignment) {
             return res.status(400).json({ message: 'Room has already been assigned' });
         }
@@ -21,16 +21,13 @@ const createRoomAssignment = async (req, res) => {
         const newRoomAssignment = await RoomAssignment.create(roomAssignmentData);
 
         // Create a copy of the RoomAssignment object
-        let roomAssignmentObj = newRoomAssignment
-        .toObject()
-        .populate('room')
-        .populate('occupant', 'firstName lastName email phone');
+        let roomAssignmentObj = newRoomAssignment.toObject();
 
         // Delete the user field from the copy
         delete roomAssignmentObj.user;
 
         // Send the response
-        res.json({
+        res.status(201).json({
             message: "Successfully created a new room assignment",
             data: roomAssignmentObj,
         });
@@ -52,10 +49,10 @@ const getAllRoomAssignments = async (req, res) => {
         // Find all room assignments that belong to the user
         const allRoomAssignments = await RoomAssignment.find({ user: userId })
         .select('-user')
-        .populate('room')
+        .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
 
-        res.json({
+        res.status(200).json({
             message: "Successfully retrieved all room assignments",
             data: allRoomAssignments,
         });
@@ -74,9 +71,9 @@ const getRoomAssignmentById = async (req, res) => {
     try {
         const roomAssignment = await RoomAssignment.findOne({ _id: req.params.id, user: req.user._id })
         .select('-user')
-        .populate('room')
+        .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
-        res.json({
+        res.status(200).json({
             message: "Successfully retrieved room assignment",
             data: roomAssignment,
         });
@@ -92,20 +89,17 @@ const getRoomAssignmentById = async (req, res) => {
 // PUT localhost:3000/room-assignments/:id
 const updateRoomAssignmentById = async (req, res) => {
     try {
-        // Get the user ID from the request object
-        const userId = req.user._id;
+        const roomAssignment = await RoomAssignment.findOneAndUpdate(
+            { _id: req.params.id, user: req.user._id },
+            { $set: req.body },
+            { new: true, runValidators: true, setDefaultsOnInsert: true }
+        ).select('-user');
 
-        // Find the room assignment by id
-        const roomAssignment = await RoomAssignment.findOne({ _id: req.params.id, user: userId });
         if (!roomAssignment) {
             return res.status(404).json({ message: "Room assignment not found" });
         }
-        // Update the room assignment
-        Object.assign(roomAssignment, req.body);
-        await roomAssignment.save();
 
-        // Send the response
-        res.json({
+        res.status(200).json({
             message: "Successfully updated the room assignment",
             data: roomAssignment,
         });
@@ -117,25 +111,15 @@ const updateRoomAssignmentById = async (req, res) => {
     }
 };
 
-
 // Delete a room assignment by id
 // DELETE localhost:3000/room-assignments/:id
-const deleteRoomAssignmentById = async (req, res) => {
+const deleteRoomAssignment = async (req, res) => {
     try {
-        // Get the user ID from the request object
-        const userId = req.user._id;
-
-        // Find the room assignment by id
-        const roomAssignment = await RoomAssignment.findOne({ _id: req.params.id, user: userId });
+        const roomAssignment = await RoomAssignment.findOneAndDelete({ _id: req.params.id, user: req.user._id }).select('-user');
         if (!roomAssignment) {
             return res.status(404).json({ message: "Room assignment not found" });
         }
-
-        // Delete the room assignment
-        await roomAssignment.remove();
-
-        // Send the response
-        res.json({
+        res.status(200).json({
             message: "Successfully deleted the room assignment",
             data: roomAssignment,
         });
@@ -153,7 +137,7 @@ module.exports = {
     getAllRoomAssignments,
     getRoomAssignmentById,
     updateRoomAssignmentById,
-    deleteRoomAssignmentById,
+    deleteRoomAssignment,
 };
 
 
