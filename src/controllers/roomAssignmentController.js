@@ -12,7 +12,7 @@ const createRoomAssignment = async (req, res) => {
         };
 
         // Check on db if room has already been assigned
-        const existingRoomAssignment = await RoomAssignment.findOne({ room: roomAssignmentData.room, isRentalAgreementActive: true});
+        const existingRoomAssignment = await RoomAssignment.findOne({ room: roomAssignmentData.room, isActive: true});
         if (existingRoomAssignment) {
             return res.status(400).json({ message: 'Room has already been assigned' });
         }

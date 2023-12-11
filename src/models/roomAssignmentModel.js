@@ -51,7 +51,11 @@ const roomAssignmentSchema = new Schema({
         required: true 
     },
 
-    isRentalAgreementActive: {
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
+    isAssigned: {
         type: Boolean,
         default: true,
     },
