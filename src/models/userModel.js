@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const Occupant = require('./occupantModel');
 const Schema = mongoose.Schema;
 
 const addressSchema = new Schema({
@@ -30,6 +31,15 @@ userSchema.pre('save', async function(next) {
         this.password = await bcrypt.hash(this.password, 10);
     }
     next();
+});
+
+// If user gets deletes also delete all occupants associated with that user
+userSchema.post('findOneAndDelete', async function(doc) {
+    if (doc) {
+        await Occupant.deleteMany({
+            user: doc._id
+        });
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);

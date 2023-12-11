@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watchAll",
+    "test:debug": "node --inspect-brk -r esm node_modules/jest/bin/jest.js --runInBand",
+    "generate-coverage-badge": "jest-coverage-badge"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +28,10 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.0.2",
     "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-coverage-badge": "^1.0.0",
+    "sinon": "^17.0.1"
   }
 }
