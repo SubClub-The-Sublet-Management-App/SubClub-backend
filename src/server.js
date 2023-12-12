@@ -34,6 +34,10 @@ app.use('/occupants', occupantRoutes);
 const roomAssignmentRoutes = require('./routes/roomAssignmentRouter');
 app.use('/room-assignments', roomAssignmentRoutes);
 
+// import payment record routes
+const paymentRecordRoutes = require('./routes/paymentRecordRouter');
+app.use('/payment-records', paymentRecordRoutes);
+
 module.exports = {
 app}
 
