@@ -23,7 +23,7 @@ describe('User Model Test', () => {
         await mongoose.connection.close();
     });
 
-    // Test for valid data
+    // Test for post operation create new user with valid data
     it('create & save user successfully', async () => {
         const userData = {
             firstName: 'Hugh-N',
@@ -67,6 +67,33 @@ describe('User Model Test', () => {
         expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
     });
 
+    //test for field type
+    it('should throw an error if fields are not the correct type', async () => {
+        const userWithInvalidField = new User ({
+            firstName: 123,
+            lastName: 123,
+            dob: 'not a date',
+            email: new Date(),
+            password: 123,
+            phoneNumber: new Date(),
+            address: {
+                street: 123,
+                number: 'not a number',
+                city: 123,
+                postCode:123,
+                state: 123
+            }
+        });
+        let err;
+        try {
+            const savedUserWithInvalidField = await userWithInvalidField.save();
+            error = savedUserInvalidField;
+        } catch (error) {
+            err = error;
+        }
+        expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
+    });
+
     // Test for duplicated email
     it('throws error when email already exists', async () => {
         let err;
@@ -86,7 +113,7 @@ describe('User Model Test', () => {
                     state: 'State'
                 }
             });
-            await user1.save();
+            savedUser= await user1.save();
             createdUserIds.push(savedUser._id);
 
             const user2 = new User({ 
@@ -105,12 +132,42 @@ describe('User Model Test', () => {
                 }
             });
             await user2.save();
+
         } catch (error) {
             err = error;
         }
         expect(err).toBeInstanceOf(mongoose.mongo.MongoError);
         expect(err.code).toBe(11000);
     });
+
+    // Test for hashing password before saving
+    it('hash user password before saving', async () => {
+        const user = new User({
+            email: 'test@mail.com',
+            password: 'testPassword',
+            firstName: 'Tess',
+            lastName: 'Tester'
+        });
+        savedUser = await user.save();
+        createdUserIds.push(savedUser._id);
+
+        const foundUser = await User.findOne({ email: 'test@mail.com' });
+        const isPasswordCorrect = await bcrypt.compare('testPassword', foundUser.password);
+        expect(isPasswordCorrect).toBe(true);
+    });
+
+
+    // Test for email format validation
+    it('throw a validation error if email is invalid', async () => {
+        const userWithInvalidEmail = new User({
+            firstName: 'Tess',
+            lastName: 'Tester',
+            email: 'invalidEmail',
+            password: 'testPassword',
+        });
+        await expect(userWithInvalidEmail.save()).rejects.toThrow(mongoose.Error.ValidationError);
+    });
+
 
     // Test for update operations
     it('updates user successfully', async () => {
