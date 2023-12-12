@@ -10,6 +10,12 @@ const paymentRecordSchema = new Schema({
         type: mongoose.Types.ObjectId, 
         ref: 'RoomAssignment' 
     }, 
+    // reference to the User
+    user: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true 
+    },
     
     paymentType:{
         type: String, 
@@ -23,7 +29,10 @@ const paymentRecordSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-    receiptStatus: String
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 module.exports = mongoose.model('PaymentRecord', paymentRecordSchema);
