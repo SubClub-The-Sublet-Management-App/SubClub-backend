@@ -65,7 +65,7 @@ describe('RoomAssignment Model Test', () => {
     });
 
 
-    // Test for valid data
+    // Test for create new room assignment with valid data
     it('create & save room assignment successfully', async () => {
         const roomAssignmentData = {
             room: room._id,
@@ -172,6 +172,26 @@ describe('RoomAssignment Model Test', () => {
 
         expect(foundRoomAssignment).toBeDefined();
         expect(foundRoomAssignment.room.toString()).toBe(room._id.toString());
+    });
+
+    // Test for delete operations
+    it('deletes room assignment successfully', async() => { 
+        const validRoomAssignment = new RoomAssignment({
+            room: room._id,
+            occupant: occupant._id,
+            user: user._id,
+            startDate: new Date(),
+            endDate: new Date(),
+            rentInclusions: ['bills', 'internet', 'parking'],
+            rentalPayment: 500,
+            rentalPaymentFrequency: 'Monthly',
+            securityDeposit: 1000,
+        });
+        const savedRoomAssignment = await validRoomAssignment.save();
+        await savedRoomAssignment.deleteOne({_id:savedRoomAssignment._id});
+        const deletedRoomAssignment = await RoomAssignment.findById(savedRoomAssignment._id);
+        expect(deletedRoomAssignment).toBeNull();
+
     });
 });
 
