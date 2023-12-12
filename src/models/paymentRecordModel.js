@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const RoomAssignment = require('./roomAssignmentModel'); 
 
-
 const paymentRecordSchema = new Schema({
 
     // Room Assignment reference
@@ -10,6 +9,12 @@ const paymentRecordSchema = new Schema({
         type: mongoose.Types.ObjectId, 
         ref: 'RoomAssignment' 
     }, 
+    // reference to the User
+    user: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true 
+    },
     
     paymentType:{
         type: String, 
@@ -17,13 +22,28 @@ const paymentRecordSchema = new Schema({
     },
     amountPaid:{ 
         type:Number,
-        required:true
+        required: true
+    },
+    paymentPeriodStart:{
+        type: Date,
+        required: true
+    },
+    paymentPeriodEnd:{
+        type: Date,
+        required: true
     },
     paymentDate:{
         type: Date,
         default: Date.now()
     },
-    receiptStatus: String
+    nextPaymentDate:{
+        type: Date,
+        required: true
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 module.exports = mongoose.model('PaymentRecord', paymentRecordSchema);
