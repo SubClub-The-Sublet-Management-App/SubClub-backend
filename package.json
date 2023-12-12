@@ -32,6 +32,7 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-coverage-badge": "^1.0.0",
-    "sinon": "^17.0.1"
+    "sinon": "^17.0.1",
+    "supertest": "^6.3.3"
   }
 }
