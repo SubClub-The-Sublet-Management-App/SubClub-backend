@@ -15,7 +15,7 @@ router.get('/', getAllUsers);
 router.get('/:id', getUserById);
 
 // PUT localhost:3000/users/:id
-router.put('/:id', updateUserById);
+router.patch('/:id', updateUserById);
 
 // DELETE localhost:3000/users/:id
 router.delete('/:id', deleteUserById);
