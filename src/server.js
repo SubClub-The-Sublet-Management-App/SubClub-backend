@@ -17,7 +17,6 @@ app.get("/", (request, response) => {
 const roomRoutes = require('./routes/roomRouter');
 app.use('/rooms', roomRoutes);
 
-
 // import user routes
 const userRoutes = require('./routes/userRouter');
 app.use('/users', userRoutes);
