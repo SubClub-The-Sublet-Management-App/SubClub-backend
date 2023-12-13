@@ -43,8 +43,6 @@ const viewProfile = async (req, res) => {
 // DELETE localhost:3000/users/delete
 const deleteAccount = async (req, res) => {
     try {
-        console.log('User ID:', req.user._id); // Log the user ID
-
         const user = await User.findOneAndDelete(req.user._id);
 
         if (!user) {
