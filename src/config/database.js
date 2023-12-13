@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-async function databaseConnect(){
+async function dataBaseConnect(){
 	try {
 		// DB connection can take some time, eg. if DB is in the cloud 
 		console.log("Connecting to:\n" + process.env.DB_URI);
@@ -12,5 +12,5 @@ async function databaseConnect(){
 }
 
 module.exports = {
-	databaseConnect
+	dataBaseConnect
 }
