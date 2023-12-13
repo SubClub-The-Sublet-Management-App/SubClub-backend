@@ -1,7 +1,7 @@
 // This file handles the boot-up of the server 
 require('dotenv').config();
 
-const { databaseConnect } = require('./database');
+const { databaseConnect } = require('./config/database');
 const { app } = require('./server');
 
 const PORT = process.env.PORT || 3000;
