@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Occupant = require('./occupantModel');
+const Room = require('./roomModel');
+const RoomAssignment = require('./roomAssignmentModel');
+const PaymentRecord = require('./paymentRecordModel');
+
 const Schema = mongoose.Schema;
 
 const addressSchema = new Schema({
@@ -37,6 +41,15 @@ userSchema.pre('save', async function(next) {
 userSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         await Occupant.deleteMany({
+            user: doc._id
+        });
+        await Room.deleteMany({
+            user: doc._id
+        });
+        await RoomAssignment.deleteMany({
+            user: doc._id
+        });
+        await PaymentRecord.deleteMany({
             user: doc._id
         });
     }
