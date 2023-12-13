@@ -1,24 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
 const {
-    createUser,
-    getAllUsers,
-    getUserById,
-    updateUserById,
-    deleteUserById,
+    updateProfile,
+    viewProfile,
+    deleteAccount
 } = require('../controllers/userController');
 
-// GET localhost:3000/users/
-router.get('/', getAllUsers);
+// PATCH localhost:3000/users/profile/
+router.patch('/profile', authMiddleware, updateProfile);
 
-// GET localhost:3000/users/:id
-router.get('/:id', getUserById);
+// GET localhost:3000/users/profile/
+router.get('/profile', authMiddleware, viewProfile);
 
-// PUT localhost:3000/users/:id
-router.put('/:id', updateUserById);
-
-// DELETE localhost:3000/users/:id
-router.delete('/:id', deleteUserById);
-
+// DELETE localhost:3000/users/delete/
+router.delete('/delete', authMiddleware, deleteAccount);
 
 module.exports = router;
