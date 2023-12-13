@@ -24,7 +24,7 @@ router.get('/:id', authMiddleware, getRoomById);
 router.get('/name/:name', authMiddleware, getRoomByName);
 
 // PUT localhost:3000/rooms/:id
-router.put('/:id', authMiddleware, updateRoom);
+router.patch('/:id', authMiddleware, updateRoom);
 
 // DELETE localhost:3000/rooms/:id
 router.delete('/:id', authMiddleware, deleteRoom);
