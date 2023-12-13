@@ -6,5 +6,4 @@ const { app } = require('./server');
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
   await dataBaseConnect();
-  console.log(`Server is running on port ${PORT}`);
 });
