@@ -2,77 +2,69 @@
 const express = require('express');
 const User = require('../models/userModel')
 
-// Get all users
-const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find().select('-password');
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({
-            message: "Unable to fetch users",
-            error: error.message,
-        });
-    }
-};
+// Update user profile
+// PATCH localhost:3000/users/profile
+const updateProfile = async (req, res) => {
+    const updateData = req.body;
 
-// Get a user by ID
-const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-password');
+        const user = await User.findByIdAndUpdate(req.user._id, updateData, { new: true }).select('-password');
+
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json(user);
+
+        res.status(200).json({ message: 'Profile updated successfully', user });
     } catch (error) {
-        res.status(500).json({
-            message: "Unable to retrieve user",
+        res.status(500).json({ message: 'Update failed' });
+    }
+};
+
+// View user profile
+// GET localhost:3000/users/profile
+const viewProfile = async (req, res) => {
+    const updateData = req.body;
+
+    try {
+        const user = await User.findById(req.user._id).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'Successfully retrieved user profile', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Unable to retrieve user profile' });
+    }
+};
+
+
+// Delete user account
+// DELETE localhost:3000/users/delete
+const deleteAccount = async (req, res) => {
+    try {
+        console.log('User ID:', req.user._id); // Log the user ID
+
+        const user = await User.findOneAndDelete(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User account not found'});
+        }
+        
+        res.status(200).json({ message: 'Your account has been successfully deleted'});
+    } catch (error) {
+        res.status(500).json({ 
+            message: 'Unable to delete user account',
             error: error.message,
         });
     }
 };
 
-// Update a user by ID
-const updateUserById = async (req, res) => {
-    try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        }).select('-password');
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.status(200).json(updatedUser);
-    } catch (error) {
-        res.status(500).json({
-            message: "Unable to update user",
-            error: error.message,
-        });
-    }
-};
 
-// Delete a user by ID
-const deleteUserById = async (req, res) => {
-    try {
-        const deletedUser = await User.findByIdAndDelete(req.params.id).select('-password');
-        if (!deletedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.status(200).json({ 
-            message: 'User deleted successfully',
-            deletedUser: deletedUser
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "Unable to delete user",
-            error: error.message,
-        });
-    }
-};
 
 module.exports = {
-    getAllUsers,
-    getUserById,
-    updateUserById,
-    deleteUserById,
+    updateProfile,
+    viewProfile,
+    deleteAccount
 };
 

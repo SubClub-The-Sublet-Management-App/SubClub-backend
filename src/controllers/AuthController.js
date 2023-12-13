@@ -5,8 +5,8 @@ const validateFields = require('../utils/validateFields');
 const { comparePassword, generateJwt } = require('../utils/authHelpers'); 
 
 
-// Desc: Register a new user
-
+// Create user account
+// POST localhost:3000/auth/signup
 async function signup(req, res) {
     try {
         const { firstName, lastName, email, password } = req.body;
@@ -54,7 +54,8 @@ async function signup(req, res) {
     }
 }
 
-
+// Login into user account
+// POST localhost:3000/auth/login
 async function login(req, res) {
     try {
         const { email, password } = req.body;
