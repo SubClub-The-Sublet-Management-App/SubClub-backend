@@ -5,7 +5,7 @@ const validateFields = require('../utils/validateFields');
 const { comparePassword, generateJwt } = require('../utils/authHelpers'); 
 
 
-// Create a new user
+// Create user account
 // POST localhost:3000/auth/signup
 async function signup(req, response) {
     try {
@@ -54,8 +54,7 @@ async function signup(req, response) {
     }
 }
 
-
-//User Login
+// Login into user account
 // POST localhost:3000/auth/login
 async function login(req, response) {
     try {
@@ -89,7 +88,7 @@ async function login(req, response) {
         // Send the response
         response.status(200).json({ message: 'Logged in successfully', token });
     } catch (error) {
-        response.status(500).json({ message: 'Login failed' }); // Send a generic error message
+        response.status(500).json({ message: 'Login failed' });
     }
 };
 
