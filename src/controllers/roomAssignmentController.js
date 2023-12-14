@@ -11,15 +11,40 @@ const createRoomAssignment = async (req, response) => {
             user: req.user._id,
         };
 
-        // Check on db if room has already been assigned
-        const existingRoomAssignment = await RoomAssignment.findOne({ room: roomAssignmentData.room, isActive: true});
-        if (existingRoomAssignment) {
-            return response.status(400).json({ message: 'Room has already been assigned' });
+        const startRequestDate = new Date(roomAssignmentData.startDate);
+        const endRequestDate = new Date(roomAssignmentData.endDate);
+
+        // Validate request assignment dates
+        if (endRequestDate < startRequestDate){
+            return response.status(400).json({ message: 'End Date cannot be before Start Date' });
         }
 
-        // Create the new room assignment
-        const newRoomAssignment = await RoomAssignment.create(roomAssignmentData);
+        // Check on db if room has already been assigned
+        const existingRoomAssignment = await RoomAssignment.findOne({ room: roomAssignmentData.room, isActive: true});
 
+        let newRoomAssignment;
+        if (existingRoomAssignment) {
+            // check the start and end date of the assignment is within the new 
+            const assignmentsStartDate = new Date(existingRoomAssignment.startDate);
+            const assignmentsEndDate = new Date(existingRoomAssignment.endDate);
+
+            // Function to check if the request date is within the dates already assigned to the room.
+            const isWithinRange = (startRequestDate, assignmentsStartDate, assignmentsEndDate) => {
+                return startRequestDate >= assignmentsStartDate && startRequestDate <= assignmentsEndDate;
+            };
+
+            if (isWithinRange(startRequestDate, assignmentsStartDate, assignmentsEndDate)) {
+                // The date is within the range
+                return response.status(400).json({ message: 'Room has already been assigned for that date' });
+            } else {
+                // Create the new room assignment
+                newRoomAssignment = await RoomAssignment.create(roomAssignmentData);
+            } 
+        } else {
+            // Create the new room assignment
+            newRoomAssignment = await RoomAssignment.create(roomAssignmentData);
+        }
+        
         // Create a copy of the RoomAssignment object
         let roomAssignmentObj = newRoomAssignment.toObject();
 
@@ -49,7 +74,7 @@ const getAllRoomAssignments = async (req, response) => {
         .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
 
-        // Send response
+        // Send request response
         response.status(200).json({
             message: "Successfully retrieved all room assignments",
             data: allRoomAssignments,
@@ -72,7 +97,7 @@ const getRoomAssignmentById = async (req, response) => {
         .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
 
-        // Send response
+        // Send request response
         response.status(200).json({
             message: "Successfully retrieved room assignment by id",
             data: roomAssignment,
@@ -89,7 +114,7 @@ const getRoomAssignmentById = async (req, response) => {
 // PUT localhost:3000/room-assignments/:id
 const updateRoomAssignmentById = async (req, response) => {
     try {
-        // Find room assignments by user and id
+        // Find room assignment by user and id
         const roomAssignment = await RoomAssignment.findOneAndUpdate(
             { _id: req.params.id, user: req.user._id },
             { $set: req.body },
