@@ -25,15 +25,20 @@ const roomAssignmentSchema = new Schema({
     },
 
     // Agreement reference
-
     startDate: { 
         type: Date, 
         required: true 
     },  
-    endDate: { 
+    endDate: {
         type: Date,
-        required: true 
-    },  
+        required: true,
+        validate: {
+            validator: function(value) {
+                return this.startDate <= value;
+            },
+            message: 'End Date cannot be before Start Date.'
+        }
+    },
     rentInclusions: { 
         type: [String], 
         required: true 
