@@ -12,13 +12,12 @@ describe('User Controller', () => {
         // Conection to the DB
         await mongoose.connect(process.env.DB_URI);
 
-        // Create user for testing purpuses
+        // Create user for the test
         user = new User({ 
             firstName: 'Tess',
             lastName: 'Tester',
             email: 'tester001@mail.com',
             password: 'StrongPassword123!',
-
         });
         await user.save();
         userIdString = user._id.toString();
@@ -34,7 +33,6 @@ describe('User Controller', () => {
         token = response.body.token;
 
         // Create a room for test
-
         const room = await request(app)
         .post('/rooms/')
         .set('Authorization', `Bearer ${token}`)
@@ -46,8 +44,6 @@ describe('User Controller', () => {
         });
 
         roomId =room._body.data._id;
-
-
     });
 
     afterAll(async () => {
@@ -55,13 +51,13 @@ describe('User Controller', () => {
         await Room.deleteMany({ user: userIdString});
         await User.findByIdAndDelete(userIdString);
         
-    
         // Close the database connection
         await mongoose.connection.close();
     });
 
-    
+    // Test for post operations
     it('should create a new room', async () => {
+
         // Send post request
         const response = await request(app)
             .post('/rooms/')
@@ -89,7 +85,6 @@ describe('User Controller', () => {
         const createdRoom = await Room.findById(createdRoomId);
         expect(createdRoom.name).toEqual('Room01');
     });
-
 
     // Test for Read operation
     it('should fetch rooms', async () => {
@@ -123,7 +118,6 @@ describe('User Controller', () => {
         expect(existingRoom.name).toEqual('Fancy room');
     });
 
-
     //Test for update operation by ID
     it('should fetch and update room by id', async () => {
         
@@ -146,7 +140,6 @@ describe('User Controller', () => {
         // Verify that room data got updated on the DB
         const updatedRoom = await Room.findById(roomId);
         expect(updatedRoom.name).toEqual('The best room');      
-
     });
 
     //Test for delete operation by ID
@@ -170,6 +163,4 @@ describe('User Controller', () => {
         const deletedRoom = await Room.findById(roomId);
         expect(deletedRoom).toEqual(null);
     });
-
-
 }); 
