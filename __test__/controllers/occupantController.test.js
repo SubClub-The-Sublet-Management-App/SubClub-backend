@@ -18,7 +18,6 @@ describe('User Controller', () => {
             lastName: 'Tester',
             email: 'tester002@mail.com',
             password: 'StrongPassword123!',
-
         });
         await user.save();
         userIdString = user._id.toString();
@@ -33,7 +32,7 @@ describe('User Controller', () => {
 
         token = response.body.token;
 
-        //Create a occupant for test
+        //Create a occupant for the test
         const occupant = await request(app)
         .post('/occupants/')
         .set('Authorization', `Bearer ${token}`)
@@ -59,7 +58,6 @@ describe('User Controller', () => {
                 email:'a-test@mail.com'
             },
         });
-
         occupantId =occupant._body.data._id;
     });
 
@@ -68,13 +66,13 @@ describe('User Controller', () => {
         await Occupant.deleteMany({ user: userIdString});
         await User.findByIdAndDelete(userIdString);
         
-    
         // Close the database connection
         await mongoose.connection.close();
     });
 
-    
+    // Test for post operations
     it('should create a new occupant', async () => {
+
         // Send post request
         const response = await request(app)
             .post('/occupants/')
@@ -101,6 +99,7 @@ describe('User Controller', () => {
                     email:'a-test@mail.com'
                 },
             });
+
         // Verify request response
         expect(response.statusCode).toEqual(201);
         expect(response.body).toHaveProperty('message', 'Successfully created a new Occupant');
@@ -120,9 +119,7 @@ describe('User Controller', () => {
         // Check that occupant exist on the DB
         const updatedOccupant = await Occupant.findById(createdOccupantId);
         expect(updatedOccupant.email).toEqual('test-occupant@mail.com');
-
     });
-
 
     // Test for Read operation
     it('should get all occupants', async () => {
@@ -141,7 +138,7 @@ describe('User Controller', () => {
     //Test for read operation by ID
     it('should get occupant by id', async () => {
 
-        // Sent get requets
+        // Send get requets
         const response = await request(app)
         .get(`/occupants/${occupantId}`)
         .set('Authorization', `Bearer ${token}`);
@@ -154,9 +151,7 @@ describe('User Controller', () => {
         // Verify that occupant exist on the DB
         const existingOccupant = await Occupant.findById(occupantId);
         expect(existingOccupant.firstName).toEqual('Test');
-
     });
-
 
     //Test for update operation by ID
     it('should update occupant by id', async () => {
@@ -178,9 +173,8 @@ describe('User Controller', () => {
         expect(response.body.data.emergencyContact.email).toEqual('tester10000@mail.com');
 
         // Verify that occupant data got updated on the DB
-        const updatedOccupant = await Occupant.findById(occupantId)
-        expect(updatedOccupant.firstName).toEqual('Test100')
-        
+        const updatedOccupant = await Occupant.findById(occupantId);
+        expect(updatedOccupant.firstName).toEqual('Test100');
     });
 
     // Test for delete operation by ID
@@ -197,10 +191,8 @@ describe('User Controller', () => {
         expect(response.body).toHaveProperty('data');
 
         // Verify that the occupant got deleted from the DB
-        const deletedOccupant = await Occupant.findById(occupantId)
-        expect(deletedOccupant).toEqual(null)
+        const deletedOccupant = await Occupant.findById(occupantId);
+        expect(deletedOccupant).toEqual(null);
 
     });
-
-
 }); 
