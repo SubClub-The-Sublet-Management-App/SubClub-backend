@@ -26,7 +26,7 @@ const createRoomAssignment = async (req, response) => {
         // Delete the user field from the copy
         delete roomAssignmentObj.user;
 
-        // Send the response
+        // Send response
         response.status(201).json({
             message: "Successfully created a new room assignment",
             data: roomAssignmentObj,
@@ -43,15 +43,13 @@ const createRoomAssignment = async (req, response) => {
 // GET localhost:3000/room-assignments/
 const getAllRoomAssignments = async (req, response) => {
     try {
-        // Get the user ID from the request object
-        const userId = req.user._id;
-
-        // Find all room assignments that belong to the user
-        const allRoomAssignments = await RoomAssignment.find({ user: userId })
+        // Find all room assignments by user
+        const allRoomAssignments = await RoomAssignment.find({ user: req.user._id})
         .select('-user')
         .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
 
+        // Send response
         response.status(200).json({
             message: "Successfully retrieved all room assignments",
             data: allRoomAssignments,
@@ -65,16 +63,18 @@ const getAllRoomAssignments = async (req, response) => {
 };
 
 // View a room assignment by id
-// 
 // GET localhost:3000/room-assignments/:id
 const getRoomAssignmentById = async (req, response) => {
     try {
+        // Find all room assignments by user and id
         const roomAssignment = await RoomAssignment.findOne({ _id: req.params.id, user: req.user._id })
         .select('-user')
         .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
+
+        // Send response
         response.status(200).json({
-            message: "Successfully retrieved room assignment",
+            message: "Successfully retrieved room assignment by id",
             data: roomAssignment,
         });
     } catch (error) {
@@ -89,16 +89,19 @@ const getRoomAssignmentById = async (req, response) => {
 // PUT localhost:3000/room-assignments/:id
 const updateRoomAssignmentById = async (req, response) => {
     try {
+        // Find room assignments by user and id
         const roomAssignment = await RoomAssignment.findOneAndUpdate(
             { _id: req.params.id, user: req.user._id },
             { $set: req.body },
             { new: true, runValidators: true, setDefaultsOnInsert: true }
         ).select('-user');
 
+        // Error handle for non existing room assignment
         if (!roomAssignment) {
             return response.status(404).json({ message: "Room assignment not found" });
         }
 
+        // Send request respond
         response.status(200).json({
             message: "Successfully updated the room assignment",
             data: roomAssignment,
@@ -110,7 +113,6 @@ const updateRoomAssignmentById = async (req, response) => {
         });
     }
 };
-
 
 // Export the controller functions
 module.exports = {
