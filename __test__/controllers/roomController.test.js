@@ -158,7 +158,10 @@ describe('User Controller', () => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('message', 'Successfully deleted the room');
         expect(res.body).toHaveProperty('data');
-
+        expect(res.body.data).toHaveProperty('name', 'Room002');
+        expect(res.body.data).toHaveProperty('monthlyRentalPrice', 500);
+        expect(res.body.data).toHaveProperty('description', 'A cozy room');
+        expect(res.body.data).toHaveProperty('content', ['Bed', 'Table', 'Chair']);
     });
 
 
