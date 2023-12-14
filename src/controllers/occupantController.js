@@ -26,7 +26,7 @@ const createOccupant = async (req, res) => {
         delete occupantObj.user;
 
         // Send the response
-        res.json({
+        res.status(201).json({
             message: "Successfully created a new Occupant",
             data: occupantObj,
         });
@@ -48,7 +48,7 @@ const getAllOccupants = async (req, res) => {
         // Find all Occupants that belong to the user
         const allOccupants = await Occupant.find({ user: userId }).select('-user');
 
-        res.json({
+        res.status(200).json({
             message: "Successfully retrieved all Occupants",
             data: allOccupants,
         });
@@ -68,7 +68,7 @@ const getOccupantById = async (req, res) => {
         if (!occupant) {
             return res.status(404).json({ message: "Occupant not found" });
         }
-        res.json({
+        res.status(200).json({
             message: "Successfully retrieved the occupant by id",
             data: occupant,
         });
@@ -115,7 +115,7 @@ const deleteOccupant = async (req, res) => {
         if (!occupant) {
             return res.status(404).json({ message: "Occupant not found" });
         }
-        res.json({
+        res.status(200).json({
             message: "Successfully deleted the occupant",
             data: occupant,
         });
