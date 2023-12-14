@@ -2,11 +2,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 require('dotenv').config();
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = async (req, response, next) => {
     // Get token from the header
     const authHeader = req.header('Authorization');
     if (!authHeader) {
-        return res.status(401).json({ message: 'No Authorization header, authorization denied' });
+        return response.status(401).json({ message: 'No Authorization header, authorization denied' });
     }
     const token = authHeader.replace('Bearer ', '');
 
@@ -17,14 +17,14 @@ const authMiddleware = async (req, res, next) => {
         // Find the user
         const user = await User.findById(decoded.userId);
         if (!user) {
-            return res.status(401).json({ message: 'User not found, authorization denied' });
+            return response.status(401).json({ message: 'User not found, authorization denied' });
         }
 
         // Attach the user to the request object
         req.user = user;
         next();
     } catch (error) {
-        res.status(401).json({ message: 'Token is not valid, authorization denied' });
+        response.status(401).json({ message: 'Token is not valid, authorization denied' });
     }
 };
 

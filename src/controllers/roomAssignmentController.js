@@ -3,7 +3,7 @@ const Room = require('../models/roomModel');
 
 // Create a new room assignment
 // POST - localhost:3000/room-assignments/
-const createRoomAssignment = async (req, res) => {
+const createRoomAssignment = async (req, response) => {
     try {
         // Include the user field in the room assignment data
         const roomAssignmentData = {
@@ -14,7 +14,7 @@ const createRoomAssignment = async (req, res) => {
         // Check on db if room has already been assigned
         const existingRoomAssignment = await RoomAssignment.findOne({ room: roomAssignmentData.room, isActive: true});
         if (existingRoomAssignment) {
-            return res.status(400).json({ message: 'Room has already been assigned' });
+            return response.status(400).json({ message: 'Room has already been assigned' });
         }
 
         // Create the new room assignment
@@ -27,12 +27,12 @@ const createRoomAssignment = async (req, res) => {
         delete roomAssignmentObj.user;
 
         // Send the response
-        res.status(201).json({
+        response.status(201).json({
             message: "Successfully created a new room assignment",
             data: roomAssignmentObj,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to create a new room assignment",
             error: error.message,
         });
@@ -41,7 +41,7 @@ const createRoomAssignment = async (req, res) => {
 
 // View all room assignments
 // GET localhost:3000/room-assignments/
-const getAllRoomAssignments = async (req, res) => {
+const getAllRoomAssignments = async (req, response) => {
     try {
         // Get the user ID from the request object
         const userId = req.user._id;
@@ -52,12 +52,12 @@ const getAllRoomAssignments = async (req, res) => {
         .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
 
-        res.status(200).json({
+        response.status(200).json({
             message: "Successfully retrieved all room assignments",
             data: allRoomAssignments,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to retrieve room assignments",
             error: error.message,
         });
@@ -67,18 +67,18 @@ const getAllRoomAssignments = async (req, res) => {
 // View a room assignment by id
 // 
 // GET localhost:3000/room-assignments/:id
-const getRoomAssignmentById = async (req, res) => {
+const getRoomAssignmentById = async (req, response) => {
     try {
         const roomAssignment = await RoomAssignment.findOne({ _id: req.params.id, user: req.user._id })
         .select('-user')
         .populate('room', 'monthlyRentalPrice content')
         .populate('occupant', 'firstName lastName email phone');
-        res.status(200).json({
+        response.status(200).json({
             message: "Successfully retrieved room assignment",
             data: roomAssignment,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to retrieve room assignment",
             error: error.message,
         });
@@ -87,7 +87,7 @@ const getRoomAssignmentById = async (req, res) => {
 
 // Update a room assignment by id
 // PUT localhost:3000/room-assignments/:id
-const updateRoomAssignmentById = async (req, res) => {
+const updateRoomAssignmentById = async (req, response) => {
     try {
         const roomAssignment = await RoomAssignment.findOneAndUpdate(
             { _id: req.params.id, user: req.user._id },
@@ -96,15 +96,15 @@ const updateRoomAssignmentById = async (req, res) => {
         ).select('-user');
 
         if (!roomAssignment) {
-            return res.status(404).json({ message: "Room assignment not found" });
+            return response.status(404).json({ message: "Room assignment not found" });
         }
 
-        res.status(200).json({
+        response.status(200).json({
             message: "Successfully updated the room assignment",
             data: roomAssignment,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to update the room assignment",
             error: error.message,
         });

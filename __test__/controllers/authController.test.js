@@ -27,7 +27,7 @@ describe('Auth Controller for signup and login', () => {
 
      // Test for Create operation
      it('should create a new user', async () => {
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/signup')
             .send({
                 firstName: 'Tess',
@@ -36,19 +36,19 @@ describe('Auth Controller for signup and login', () => {
                 password: 'Password1234!',
             });
 
-        createdUserIds.push(res.body.userObj._id);
-        expect(res.statusCode).toEqual(201);
-        expect(res.body).toHaveProperty('message', 'User registered successfully');
-        expect(res.body).toHaveProperty('userObj');
-        expect(res.body.userObj).toHaveProperty('firstName', 'Tess');
-        expect(res.body.userObj).toHaveProperty('lastName', 'Tester');
-        expect(res.body.userObj).toHaveProperty('email', 'tester100@mail.com');
-        expect(res.body.userObj).not.toHaveProperty('password');
+        createdUserIds.push(response.body.userObj._id);
+        expect(response.statusCode).toEqual(201);
+        expect(response.body).toHaveProperty('message', 'User registered successfully');
+        expect(response.body).toHaveProperty('userObj');
+        expect(response.body.userObj).toHaveProperty('firstName', 'Tess');
+        expect(response.body.userObj).toHaveProperty('lastName', 'Tester');
+        expect(response.body.userObj).toHaveProperty('email', 'tester100@mail.com');
+        expect(response.body.userObj).not.toHaveProperty('password');
     });
 
     // Test for weak password
     it('returns error when password is not strong enough', async () => {
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/signup')
             .send({
                 firstName: 'Test',
@@ -57,13 +57,13 @@ describe('Auth Controller for signup and login', () => {
                 password: 'weak',
             });
 
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty('message', 'Password is not strong enough');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toHaveProperty('message', 'Password is not strong enough');
     });
 
     // Test for missing fields
     it('returns error when a required field is missing', async () => {
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/signup')
             .send({
                 firstName: 'Test',
@@ -72,13 +72,13 @@ describe('Auth Controller for signup and login', () => {
                 // password field is missing
             });
 
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty('message', 'Password is required');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toHaveProperty('message', 'Password is required');
     });
 
     // Test for invalid email
     it('returns error when email is invalid', async () => {
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/signup')
             .send({
                 firstName: 'Test',
@@ -87,8 +87,8 @@ describe('Auth Controller for signup and login', () => {
                 password: 'StrongPassword123',
             });
 
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty('message', 'Invalid email format');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toHaveProperty('message', 'Invalid email format');
     });
 
     // Test for email already in use
@@ -104,7 +104,7 @@ describe('Auth Controller for signup and login', () => {
             });
 
         // Then, try to create another user with the same email
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/signup')
             .send({
                 firstName: 'Test',
@@ -114,35 +114,35 @@ describe('Auth Controller for signup and login', () => {
             });
 
         createdUserIds.push(user1.body.userObj._id);
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty('message', 'Email already in use');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toHaveProperty('message', 'Email already in use');
     });
 
 
     // Test for missing fields
     it('returns error when a required field is missing', async () => {
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/login')
             .send({
                 email: 'testuser@mail.com',
                 // password field is missing
             });
 
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty('message', 'Password is required');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toHaveProperty('message', 'Password is required');
     });
 
     // Test for invalid email
     it('throws an error when email is not registered', async () => {
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/login')
             .send({
                 email: 'nonexistent@mail.com',
                 password: 'StrongPassword123!',
             });
 
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty('message', 'Invalid email');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toHaveProperty('message', 'Invalid email');
     });
 
     // Test for invalid password
@@ -158,7 +158,7 @@ describe('Auth Controller for signup and login', () => {
             });
 
         // Then, try to log in with the correct email but incorrect password
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/login')
             .send({
                 email: 'testuser1000@mail.com',
@@ -166,8 +166,8 @@ describe('Auth Controller for signup and login', () => {
             });
         
         createdUserIds.push(user1.body.userObj._id);
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toHaveProperty('message', 'Invalid password');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toHaveProperty('message', 'Invalid password');
     });
 
     // Test for successful login
@@ -183,7 +183,7 @@ describe('Auth Controller for signup and login', () => {
             });
         
         // Then, try to log in with the correct email and password
-        const res = await request(app)
+        const response = await request(app)
             .post('/auth/login')
             .send({
                 email: 'testuser2023@mail.com',
@@ -191,9 +191,9 @@ describe('Auth Controller for signup and login', () => {
             });
         
         createdUserIds.push(user1.body.userObj._id);
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('message', 'Logged in successfully');
-        expect(res.body).toHaveProperty('token');
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toHaveProperty('message', 'Logged in successfully');
+        expect(response.body).toHaveProperty('token');
     });
 
 });

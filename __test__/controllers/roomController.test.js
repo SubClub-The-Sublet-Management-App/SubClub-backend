@@ -24,14 +24,14 @@ describe('User Controller', () => {
         userIdString = user._id.toString();
 
         // user login
-        const res = await request(app)
+        const response = await request(app)
         .post('/auth/login') 
         .send({
             email: 'tester001@mail.com',
             password: 'StrongPassword123!',
         });
 
-        token = res.body.token;
+        token = response.body.token;
     });
 
     afterAll(async () => {
@@ -47,7 +47,7 @@ describe('User Controller', () => {
     
     it('should create a new room', async () => {
         // Use the .set() method to set headers (for authentication)
-        const res = await request(app)
+        const response = await request(app)
             .post('/rooms/')
             .set('Authorization', `Bearer ${token}`)
             .send({
@@ -57,32 +57,32 @@ describe('User Controller', () => {
                 content: ['Bed', 'Table', 'Chair']
             });
     
-        expect(res.statusCode).toEqual(201);
-        expect(res.body).toHaveProperty('message', 'Successfully created a new room');
-        expect(res.body).toHaveProperty('data');
-        expect(res.body.data).toHaveProperty('name', 'Room01');
-        expect(res.body.data).toHaveProperty('monthlyRentalPrice', 500);
-        expect(res.body.data).toHaveProperty('description', 'A cozy room');
-        expect(res.body.data).toHaveProperty('content', ['Bed', 'Table', 'Chair']);
-        expect(res.body.data).not.toHaveProperty('user');
+        expect(response.statusCode).toEqual(201);
+        expect(response.body).toHaveProperty('message', 'Successfully created a new room');
+        expect(response.body).toHaveProperty('data');
+        expect(response.body.data).toHaveProperty('name', 'Room01');
+        expect(response.body.data).toHaveProperty('monthlyRentalPrice', 500);
+        expect(response.body.data).toHaveProperty('description', 'A cozy room');
+        expect(response.body.data).toHaveProperty('content', ['Bed', 'Table', 'Chair']);
+        expect(response.body.data).not.toHaveProperty('user');
     });
 
 
     // Test for Read operation
-    it('should fetch a user rooms', async () => {
+    it('should fetch rooms', async () => {
         // Use the .set() method to set headers (for authentication)
-        const res = await request(app)
+        const response = await request(app)
         .get('/rooms/')
         .set('Authorization', `Bearer ${token}`)
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('message', 'Successfully retrieved all rooms');
-        expect(res.body).toHaveProperty('data');
-        expect(res.body.data).toEqual(expect.arrayContaining([expect.objectContaining({})]));
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toHaveProperty('message', 'Successfully retrieved all rooms');
+        expect(response.body).toHaveProperty('data');
+        expect(response.body.data).toEqual(expect.arrayContaining([expect.objectContaining({})]));
     });
 
     //Test for read operation by ID
-    it('should fetch a user rooms by id', async () => {
+    it('should fetch rooms by id', async () => {
 
         //Create a room for test
         const room = await request(app)
@@ -96,19 +96,19 @@ describe('User Controller', () => {
         });
 
         // Use the .set() method to set headers (for authentication)
-        const res = await request(app)
+        const response = await request(app)
         .get(`/rooms/${room._body.data._id}`)
         .set('Authorization', `Bearer ${token}`)
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('message', 'Successfully retrieved the room by id');
-        expect(res.body).toHaveProperty('data');
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toHaveProperty('message', 'Successfully retrieved the room by id');
+        expect(response.body).toHaveProperty('data');
 
     });
 
 
     //Test for update operation by ID
-    it('should fetch and update a user room by id', async () => {
+    it('should fetch and update room by id', async () => {
         //Create a room for test
         const room = await request(app)
         .post('/rooms/')
@@ -121,7 +121,7 @@ describe('User Controller', () => {
         });
 
         // Send patch request
-        const res = await request(app)
+        const response = await request(app)
         .patch(`/rooms/${room._body.data._id}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
@@ -129,16 +129,16 @@ describe('User Controller', () => {
             monthlyRentalPrice: 1000,
         });
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('message', 'Successfully updated the room');
-        expect(res.body).toHaveProperty('data');
-        expect(res.body.data).toHaveProperty('name', 'The best room');
-        expect(res.body.data).toHaveProperty('monthlyRentalPrice', 1000);
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toHaveProperty('message', 'Successfully updated the room');
+        expect(response.body).toHaveProperty('data');
+        expect(response.body.data).toHaveProperty('name', 'The best room');
+        expect(response.body.data).toHaveProperty('monthlyRentalPrice', 1000);
 
     });
 
     //Test for delete operation by ID
-    it('should fetch and delete a user room by id', async () => {
+    it('should fetch and delete room by id', async () => {
         //Create a room for test
         const room = await request(app)
         .post('/rooms/')
@@ -151,17 +151,17 @@ describe('User Controller', () => {
         });
 
         // send delete recuest
-        const res = await request(app)
+        const response = await request(app)
         .delete(`/rooms/${room._body.data._id}`)
         .set('Authorization', `Bearer ${token}`)
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('message', 'Successfully deleted the room');
-        expect(res.body).toHaveProperty('data');
-        expect(res.body.data).toHaveProperty('name', 'Room002');
-        expect(res.body.data).toHaveProperty('monthlyRentalPrice', 500);
-        expect(res.body.data).toHaveProperty('description', 'A cozy room');
-        expect(res.body.data).toHaveProperty('content', ['Bed', 'Table', 'Chair']);
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toHaveProperty('message', 'Successfully deleted the room');
+        expect(response.body).toHaveProperty('data');
+        expect(response.body.data).toHaveProperty('name', 'Room002');
+        expect(response.body.data).toHaveProperty('monthlyRentalPrice', 500);
+        expect(response.body.data).toHaveProperty('description', 'A cozy room');
+        expect(response.body.data).toHaveProperty('content', ['Bed', 'Table', 'Chair']);
     });
 
 

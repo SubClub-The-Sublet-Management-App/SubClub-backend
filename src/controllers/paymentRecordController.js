@@ -3,7 +3,7 @@ const PaymentRecord = require('../models/paymentRecordModel');
 
 // // Create a new payment record
 // // POST - localhost:3000/payment-records/
-const createPaymentRecord = async (req, res) => {
+const createPaymentRecord = async (req, response) => {
     try {
         // Include the user field in the payment record data
         const paymentRecordData = {
@@ -19,13 +19,13 @@ const createPaymentRecord = async (req, res) => {
             ] 
         });
         if (!existingRoomAssignment) {
-            return res.status(400).send({ message: 'Room assignment does not exist or is not active' });
+            return response.status(400).send({ message: 'Room assignment does not exist or is not active' });
         }
         
 
         // check if payment amount is equal to the monthly rental price of the room
         if (paymentRecordData.amountPaid !== existingRoomAssignment.rentalPayment) {
-            return res.status(400).send({ message: 'Payment amount is not equal to the monthly rental price of the room.' });
+            return response.status(400).send({ message: 'Payment amount is not equal to the monthly rental price of the room.' });
         }
 
 
@@ -54,7 +54,7 @@ const createPaymentRecord = async (req, res) => {
         const paymentPeriodLength = (paymentPeriodEnd - paymentPeriodStart) / (1000 * 3600 * 24);
 
         if (paymentPeriodLength !== paymentFrequencyInDays) {
-            return res.status(400).send({ message: 'Payment period is not same length as the room assignment payment frequency.' });
+            return response.status(400).send({ message: 'Payment period is not same length as the room assignment payment frequency.' });
         }
 
 
@@ -65,7 +65,7 @@ const createPaymentRecord = async (req, res) => {
             paymentPeriodEnd: req.body.paymentPeriodEnd 
         });
         if (existingPaymentRecord) {
-            return res.status(400).send({ message: 'A payment record for this room assignment and payment period already exists' });
+            return response.status(400).send({ message: 'A payment record for this room assignment and payment period already exists' });
         }
 
         // Create the new payment record
@@ -78,12 +78,12 @@ const createPaymentRecord = async (req, res) => {
         delete paymentRecordObj.user;
 
         // Send the response
-        res.status(201).json({
+        response.status(201).json({
             message: "Successfully created a new payment record",
             data: paymentRecordObj,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to create a new payment record",
             error: error.message,
         });
@@ -92,7 +92,7 @@ const createPaymentRecord = async (req, res) => {
 
 // View all payment records
 // GET localhost:3000/payment-records/
-const getAllPaymentRecords = async (req, res) => {
+const getAllPaymentRecords = async (req, response) => {
     try {
         // Get the user ID from the request object
         const userId = req.user._id;
@@ -100,12 +100,12 @@ const getAllPaymentRecords = async (req, res) => {
         // Find all payment records that belong to the user
         const allPaymentRecords = await PaymentRecord.find({ user: userId })
         .select('-user')
-        res.status(200).json({
+        response.status(200).json({
             message: "Successfully retrieved all payment records",
             data: allPaymentRecords,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to retrieve payment records",
             error: error.message,
         });
@@ -114,7 +114,7 @@ const getAllPaymentRecords = async (req, res) => {
 
 // View a payment record by id
 // GET localhost:3000/payment-records/:id
-const getPaymentRecordById = async (req, res) => {
+const getPaymentRecordById = async (req, response) => {
     try {
         const paymentRecord = await PaymentRecord.findOne({ _id: req.params.id, user: req.user._id })
         .select('-user')
@@ -126,12 +126,12 @@ const getPaymentRecordById = async (req, res) => {
                 { path: 'occupant', select: 'firstName lastName' }
             ]
         });
-        res.status(200).json({
+        response.status(200).json({
             message: "Successfully retrieved payment record",
             data: paymentRecord,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to retrieve payment record",
             error: error.message,
         });
@@ -140,21 +140,21 @@ const getPaymentRecordById = async (req, res) => {
 
 //Cancel payment record soft delete
 // PATCH localhost:3000/payment-records/:id
-const cancelPaymentRecord = async (req, res) => {
+const cancelPaymentRecord = async (req, response) => {
     try {
         // Find the payment record by id
         const paymentRecord = await PaymentRecord.findOne({ _id: req.params.id, user: req.user._id });
 
         // Check if the payment record exists
         if (!paymentRecord) {
-            return res.status(404).json({
+            return response.status(404).json({
                 message: 'Payment record not found'
             });
         }
 
         // Check if the payment record is already cancelled
         if (!paymentRecord.isActive) {
-            return res.status(400).json({
+            return response.status(400).json({
                 message: 'Payment record is already cancelled'
             });
         }
@@ -170,12 +170,12 @@ const cancelPaymentRecord = async (req, res) => {
         delete paymentRecordObj.user;
 
         // Send the response
-        res.status(200).json({
+        response.status(200).json({
             message: "Successfully cancelled payment record",
             data: paymentRecordObj,
         });
     } catch (error) {
-        res.status(500).json({
+        response.status(500).json({
             message: "Unable to cancel payment record",
             error: error.message,
         });

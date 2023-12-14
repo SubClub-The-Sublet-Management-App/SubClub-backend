@@ -12,7 +12,7 @@ describe('authMiddleware', () => {
     app = express();
     app.use(express.json());
     app.use(authMiddleware);
-    app.get('/test', (req, res) => res.status(200).json({ message: 'Success' }));
+    app.get('/test', (req, response) => response.status(200).json({ message: 'Success' }));
   });
 
   afterEach(() => {
