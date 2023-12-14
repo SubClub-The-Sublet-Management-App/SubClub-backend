@@ -6,7 +6,7 @@ const User = require('../../src/models/userModel');
 const Room = require('../../src/models/roomModel');
 
 describe('User Controller', () => {
-    let token, user;
+    let token, user, roomId;
 
     beforeAll(async () => {
         // Conection to the DB
@@ -32,6 +32,22 @@ describe('User Controller', () => {
         });
 
         token = response.body.token;
+
+        // Create a room for test
+
+        const room = await request(app)
+        .post('/rooms/')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+            name: 'Fancy room',
+            monthlyRentalPrice: 500,
+            description: 'A cozy room',
+            content: ['Bed', 'Table', 'Chair']
+        });
+
+        roomId =room._body.data._id;
+
+
     });
 
     afterAll(async () => {
@@ -46,7 +62,7 @@ describe('User Controller', () => {
 
     
     it('should create a new room', async () => {
-        // Use the .set() method to set headers (for authentication)
+        // Send post request
         const response = await request(app)
             .post('/rooms/')
             .set('Authorization', `Bearer ${token}`)
@@ -57,6 +73,7 @@ describe('User Controller', () => {
                 content: ['Bed', 'Table', 'Chair']
             });
     
+        // Verify request response
         expect(response.statusCode).toEqual(201);
         expect(response.body).toHaveProperty('message', 'Successfully created a new room');
         expect(response.body).toHaveProperty('data');
@@ -65,6 +82,12 @@ describe('User Controller', () => {
         expect(response.body.data).toHaveProperty('description', 'A cozy room');
         expect(response.body.data).toHaveProperty('content', ['Bed', 'Table', 'Chair']);
         expect(response.body.data).not.toHaveProperty('user');
+
+        const createdRoomId = response.body.data._id
+
+        // Verify that created room exist on the DB
+        const createdRoom = await Room.findById(createdRoomId);
+        expect(createdRoom.name).toEqual('Room01');
     });
 
 
@@ -75,6 +98,7 @@ describe('User Controller', () => {
         .get('/rooms/')
         .set('Authorization', `Bearer ${token}`)
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully retrieved all rooms');
         expect(response.body).toHaveProperty('data');
@@ -82,86 +106,69 @@ describe('User Controller', () => {
     });
 
     //Test for read operation by ID
-    it('should fetch rooms by id', async () => {
-
-        //Create a room for test
-        const room = await request(app)
-        .post('/rooms/')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-            name: 'Room0101',
-            monthlyRentalPrice: 500,
-            description: 'A cozy room',
-            content: ['Bed', 'Table', 'Chair']
-        });
-
-        // Use the .set() method to set headers (for authentication)
+    it('should get room by id', async () => {
+        // Send get request
         const response = await request(app)
-        .get(`/rooms/${room._body.data._id}`)
+        .get(`/rooms/${roomId}`)
         .set('Authorization', `Bearer ${token}`)
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully retrieved the room by id');
         expect(response.body).toHaveProperty('data');
+        expect(response.body.data).toHaveProperty('name', 'Fancy room');
 
+        // Verify that room exist on the DB
+        const existingRoom = await Room.findById(roomId);
+        expect(existingRoom.name).toEqual('Fancy room');
     });
 
 
     //Test for update operation by ID
     it('should fetch and update room by id', async () => {
-        //Create a room for test
-        const room = await request(app)
-        .post('/rooms/')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-            name: 'Room002',
-            monthlyRentalPrice: 500,
-            description: 'A cozy room',
-            content: ['Bed', 'Table', 'Chair']
-        });
-
+        
         // Send patch request
         const response = await request(app)
-        .patch(`/rooms/${room._body.data._id}`)
+        .patch(`/rooms/${roomId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
             name:'The best room',
             monthlyRentalPrice: 1000,
         });
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully updated the room');
         expect(response.body).toHaveProperty('data');
         expect(response.body.data).toHaveProperty('name', 'The best room');
         expect(response.body.data).toHaveProperty('monthlyRentalPrice', 1000);
 
+        // Verify that room data got updated on the DB
+        const updatedRoom = await Room.findById(roomId);
+        expect(updatedRoom.name).toEqual('The best room');      
+
     });
 
     //Test for delete operation by ID
     it('should fetch and delete room by id', async () => {
-        //Create a room for test
-        const room = await request(app)
-        .post('/rooms/')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-            name: 'Room002',
-            monthlyRentalPrice: 500,
-            description: 'A cozy room',
-            content: ['Bed', 'Table', 'Chair']
-        });
 
-        // send delete recuest
+        // send delete request
         const response = await request(app)
-        .delete(`/rooms/${room._body.data._id}`)
+        .delete(`/rooms/${roomId}`)
         .set('Authorization', `Bearer ${token}`)
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully deleted the room');
         expect(response.body).toHaveProperty('data');
-        expect(response.body.data).toHaveProperty('name', 'Room002');
-        expect(response.body.data).toHaveProperty('monthlyRentalPrice', 500);
+        expect(response.body.data).toHaveProperty('name', 'The best room');
+        expect(response.body.data).toHaveProperty('monthlyRentalPrice', 1000);
         expect(response.body.data).toHaveProperty('description', 'A cozy room');
         expect(response.body.data).toHaveProperty('content', ['Bed', 'Table', 'Chair']);
+
+        // Check that room got deleted from the DB
+        const deletedRoom = await Room.findById(roomId);
+        expect(deletedRoom).toEqual(null);
     });
 
 
