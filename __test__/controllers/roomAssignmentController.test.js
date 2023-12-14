@@ -49,7 +49,6 @@ describe('User Controller', () => {
         });
 
         roomAssignmentId = roomAssignment._body.data._id;
-        console.log(roomAssignment)
     });
 
     afterAll(async () => {
