@@ -6,7 +6,7 @@ const User = require('../../src/models/userModel');
 const Occupant = require('../../src/models/occupantModel');
 
 describe('User Controller', () => {
-    let token, user, occupant, occupantId, userIdString;
+    let token, user, occupantId, userIdString;
 
     beforeAll(async () => {
         // Conection to the DB
@@ -75,7 +75,7 @@ describe('User Controller', () => {
 
     
     it('should create a new occupant', async () => {
-        // Use the .set() method to set headers (for authentication)
+        // Send post request
         const response = await request(app)
             .post('/occupants/')
             .set('Authorization', `Bearer ${token}`)
@@ -101,7 +101,7 @@ describe('User Controller', () => {
                     email:'a-test@mail.com'
                 },
             });
-    
+        // Verify request response
         expect(response.statusCode).toEqual(201);
         expect(response.body).toHaveProperty('message', 'Successfully created a new Occupant');
         expect(response.body).toHaveProperty('data');
@@ -126,11 +126,12 @@ describe('User Controller', () => {
 
     // Test for Read operation
     it('should get all occupants', async () => {
-        // Use the .set() method to set headers (for authentication)
+        // Send get request
         const response = await request(app)
         .get('/occupants/')
         .set('Authorization', `Bearer ${token}`)
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully retrieved all Occupants');
         expect(response.body).toHaveProperty('data');
@@ -143,11 +144,16 @@ describe('User Controller', () => {
         // Sent get requets
         const response = await request(app)
         .get(`/occupants/${occupantId}`)
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token}`);
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully retrieved the occupant by id');
         expect(response.body).toHaveProperty('data');
+
+        // Verify that occupant exist on the DB
+        const existingOccupant = await Occupant.findById(occupantId);
+        expect(existingOccupant.firstName).toEqual('Test');
 
     });
 
@@ -155,7 +161,7 @@ describe('User Controller', () => {
     //Test for update operation by ID
     it('should update occupant by id', async () => {
 
-        // Sent get requets
+        // Send get requets
         const response = await request(app)
         .patch(`/occupants/${occupantId}`)
         .set('Authorization', `Bearer ${token}`)
@@ -164,13 +170,14 @@ describe('User Controller', () => {
             emergencyContact:{email: 'tester10000@mail.com'}
         })
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully updated the occupant');
         expect(response.body).toHaveProperty('data');
         expect(response.body.data).toHaveProperty('firstName', 'Test100');
         expect(response.body.data.emergencyContact.email).toEqual('tester10000@mail.com');
 
-        // Check on the DB that occupant data was update
+        // Verify that occupant data got updated on the DB
         const updatedOccupant = await Occupant.findById(occupantId)
         expect(updatedOccupant.firstName).toEqual('Test100')
         
@@ -179,16 +186,17 @@ describe('User Controller', () => {
     // Test for delete operation by ID
     it('should delete occupant by id', async () => {
 
-        // send delete recuest
+        // Send delete recuest
         const response = await request(app)
         .delete(`/occupants/${occupantId}`)
         .set('Authorization', `Bearer ${token}`)
 
+        // Verify request response
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully deleted the occupant');
         expect(response.body).toHaveProperty('data');
 
-        // Check on the DB that the occupant was deleted
+        // Verify that the occupant got deleted from the DB
         const deletedOccupant = await Occupant.findById(occupantId)
         expect(deletedOccupant).toEqual(null)
 
