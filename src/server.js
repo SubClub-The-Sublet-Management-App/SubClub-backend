@@ -17,7 +17,6 @@ app.get("/", (request, response) => {
 // const roomRoutes = require('./routes/roomRouter');
 // app.use('/rooms', roomRoutes);
 
-
 // import user routes
 const userRoutes = require('./routes/userRouter');
 app.use('/users', userRoutes);
@@ -38,6 +37,5 @@ app.use('/room-assignments', roomAssignmentRoutes);
 const paymentRecordRoutes = require('./routes/paymentRecordRouter');
 app.use('/payment-records', paymentRecordRoutes);
 
-module.exports = {
-app}
+module.exports = {app}
 

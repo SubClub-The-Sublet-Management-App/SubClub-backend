@@ -3,25 +3,24 @@ const { Schema } = mongoose;
 
 
 const contactSchema = new Schema({
-  firstName: {  
+  firstName: { 
     type: String,
-    required: true,
-  },
+    required: false,},
   lastName: {
     type: String,
-    required: true,
+    required: false,
   },
   phoneNumber: {
     type: String,
-    required: true,
+    required: false,
   },
   relationship: {
     type: String,
-    required: true,
+    required: false,
   },
   email: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 

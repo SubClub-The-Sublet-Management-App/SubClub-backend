@@ -7,7 +7,7 @@ const { comparePassword, generateJwt } = require('../utils/authHelpers');
 
 // Create user account
 // POST localhost:3000/auth/signup
-async function signup(req, res) {
+async function signup(req, response) {
     try {
         const { firstName, lastName, email, password } = req.body;
 
@@ -16,20 +16,20 @@ async function signup(req, res) {
         const errorMessage = validateFields(requiredFields, req);
 
         if (errorMessage) {
-            return res.status(400).json({ message: errorMessage });
+            return response.status(400).json({ message: errorMessage });
         }
 
         if (!validator.isEmail(email)) {
-            return res.status(400).json({ message: 'Invalid email format' });
+            return response.status(400).json({ message: 'Invalid email format' });
         }
         if (!validator.isStrongPassword(password)) {
-            return res.status(400).json({ message: 'Password is not strong enough' });
+            return response.status(400).json({ message: 'Password is not strong enough' });
         }
 
         // Check if the email is already in use
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: 'Email already in use' });
+            return response.status(400).json({ message: 'Email already in use' });
         }
 
 
@@ -48,15 +48,15 @@ async function signup(req, res) {
         delete userObj.password;
 
         // Send the response
-        res.status(201).json({ message: 'User registered successfully', userObj });
+        response.status(201).json({ message: 'User registered successfully', userObj });
     } catch (error) {
-        res.status(500).json({ message: 'Registration failed' }); 
+        response.status(500).json({ message: 'Registration failed' }); 
     }
 }
 
 // Login into user account
 // POST localhost:3000/auth/login
-async function login(req, res) {
+async function login(req, response) {
     try {
         const { email, password } = req.body;
 
@@ -65,30 +65,30 @@ async function login(req, res) {
         const errorMessage = validateFields(requiredFields, req);
 
         if (errorMessage) {
-            return res.status(400).json({ message: errorMessage });
+            return response.status(400).json({ message: errorMessage });
         }
 
         // Find the user by email
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ message: 'Invalid email' });
+            return response.status(400).json({ message: 'Invalid email' });
         }
 
         // Check if the password is correct
         const isPasswordValid = await comparePassword(password, user.password);
         
         if (!isPasswordValid) {
-            return res.status(400).json({ message: 'Invalid password' });
+            return response.status(400).json({ message: 'Invalid password' });
         }
 
         // Generate a JWT
         const token = generateJwt(user._id);
 
         // Send the response
-        res.status(200).json({ message: 'Logged in successfully', token });
+        response.status(200).json({ message: 'Logged in successfully', token });
     } catch (error) {
-        res.status(500).json({ message: 'Login failed' });
+        response.status(500).json({ message: 'Login failed' });
     }
 };
 

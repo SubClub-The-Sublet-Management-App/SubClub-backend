@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const mongodb = require('mongodb');
 require('dotenv').config();
 const User = require('../../src/models/userModel');
 const Room = require('../../src/models/roomModel');
