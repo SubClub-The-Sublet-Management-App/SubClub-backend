@@ -1,9 +1,16 @@
 // Server configuration happens in server.js
 
+
 const express = require('express');
+const cors = require('cors');
 
 // make a server instance 
 const app = express();
+
+app.use(cors({
+	// To be replace with frontend URL
+    origin: 'http://localhost:3000' 
+}));
 
 app.use(express.json());
 
