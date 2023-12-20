@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors({
 	// To be replace with frontend URL
-    origin: ['https://thesubclubapp.netlify.app/', /(--)?thesubclubapp\.netlify\.app$/, 'localhost:3000'],
+    origin: ['https://thesubclubapp.netlify.app/', /(--)?thesubclubapp\.netlify\.app$/, 'http://localhost:3000'],
 	credentials: true
 
 }));
