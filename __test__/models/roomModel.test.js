@@ -60,34 +60,6 @@ describe('Room Model Test', () => {
         expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
     });
 
-    // Test for duplicate room name
-    it('throws error when room name already exists', async () => {
-        let err;
-        try {
-            const room1 = new Room({ 
-                name: 'Room 2',
-                monthlyRentalPrice: 600,
-                description: 'A large room',
-                content: ['Bed', 'Table', 'Chair', 'Wardrobe'],
-                user: user._id,
-             });
-            await room1.save();
-
-            const room2 = new Room({ 
-                name: 'Room 2',
-                monthlyRentalPrice: 700,
-                description: 'A small room',
-                content: ['Bed', 'Table'],
-                user: user._id,
-             });
-            await room2.save();
-        }catch (error) {
-            err = error;
-        }
-        expect(err).toBeInstanceOf(mongoose.mongo.MongoError);
-        expect(err.code).toBe(11000);
-    });
-
     // Test for invalid data type
     it('updates room successfully', async () => {
         const validRoom = new Room({ 

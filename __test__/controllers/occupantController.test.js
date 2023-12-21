@@ -5,7 +5,7 @@ const {app} = require('../../src/server')
 const User = require('../../src/models/userModel');
 const Occupant = require('../../src/models/occupantModel');
 
-describe('User Controller', () => {
+describe('Occupant Controller', () => {
     let token, user, occupantId, userIdString;
 
     beforeAll(async () => {

@@ -5,8 +5,8 @@ const {app} = require('../../src/server')
 const User = require('../../src/models/userModel');
 const Room = require('../../src/models/roomModel');
 
-describe('User Controller', () => {
-    let token, user, roomId;
+describe('Room Controller', () => {
+    let token, user, roomId, userIdString;
 
     beforeAll(async () => {
         // Conection to the DB
@@ -16,7 +16,7 @@ describe('User Controller', () => {
         user = new User({ 
             firstName: 'Tess',
             lastName: 'Tester',
-            email: 'tester001@mail.com',
+            email: 'tester100000@mail.com',
             password: 'StrongPassword123!',
         });
         await user.save();
@@ -26,7 +26,7 @@ describe('User Controller', () => {
         const response = await request(app)
         .post('/auth/login') 
         .send({
-            email: 'tester001@mail.com',
+            email: 'tester100000@mail.com',
             password: 'StrongPassword123!',
         });
 
@@ -37,14 +37,16 @@ describe('User Controller', () => {
         .post('/rooms/')
         .set('Authorization', `Bearer ${token}`)
         .send({
-            name: 'Fancy room',
+            name: 'Room for test',
             monthlyRentalPrice: 500,
             description: 'A cozy room',
             content: ['Bed', 'Table', 'Chair']
         });
-
-        roomId =room._body.data._id;
+        roomId =room.body.data._id;
+               
     });
+
+
 
     afterAll(async () => {
         // Delete the specific user that was created during the test
@@ -54,6 +56,7 @@ describe('User Controller', () => {
         // Close the database connection
         await mongoose.connection.close();
     });
+
 
     // Test for post operations
     it('should create a new room', async () => {
@@ -111,11 +114,11 @@ describe('User Controller', () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty('message', 'Successfully retrieved the room by id');
         expect(response.body).toHaveProperty('data');
-        expect(response.body.data).toHaveProperty('name', 'Fancy room');
+        expect(response.body.data).toHaveProperty('name', 'Room for test');
 
         // Verify that room exist on the DB
         const existingRoom = await Room.findById(roomId);
-        expect(existingRoom.name).toEqual('Fancy room');
+        expect(existingRoom.name).toEqual('Room for test');
     });
 
     //Test for update operation by ID
@@ -149,6 +152,7 @@ describe('User Controller', () => {
         const response = await request(app)
         .delete(`/rooms/${roomId}`)
         .set('Authorization', `Bearer ${token}`)
+
 
         // Verify request response
         expect(response.statusCode).toEqual(200);
