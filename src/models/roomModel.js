@@ -5,7 +5,6 @@ const roomSchema = new Schema({
   name: {
       type: String,
       required: true,
-      unique:true,
   },
   monthlyRentalPrice: {
       type: Number,
@@ -30,5 +29,6 @@ const roomSchema = new Schema({
   },
 
 });
+
 
 module.exports = mongoose.model('Room', roomSchema);
