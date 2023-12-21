@@ -63,6 +63,10 @@ const occupantSchema = new Schema({
     ref: 'User', 
     required: true 
   },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 });
 
 module.exports = mongoose.model('Occupant', occupantSchema);
