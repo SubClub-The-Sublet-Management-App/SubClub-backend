@@ -71,7 +71,7 @@ const getAllRoomAssignments = async (req, response) => {
         // Find all room assignments by user
         const allRoomAssignments = await RoomAssignment.find({ user: req.user._id})
         .select('-user')
-        .populate('room', 'monthlyRentalPrice content')
+        .populate('room', 'monthlyRentalPrice content name')
         .populate('occupant', 'firstName lastName email phone');
 
         // Send request response
