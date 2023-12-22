@@ -8,13 +8,16 @@ const roomAssignmentSchema = new Schema({
     // Room reference
     room: { 
         type: mongoose.Types.ObjectId, 
-        ref: 'Room' 
+        ref: 'Room',
+        required: true 
+
     }, 
 
     // Occupant reference
     occupant: { 
         type: mongoose.Types.ObjectId, 
-        ref: 'Occupant' 
+        ref: 'Occupant' ,
+        required: true 
     }, 
 
     // reference to the User
