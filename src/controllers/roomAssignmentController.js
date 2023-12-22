@@ -1,5 +1,6 @@
 const RoomAssignment = require('../models/roomAssignmentModel');
 const Room = require('../models/roomModel');
+const Occupant = require('../models/occupantModel');
 
 // Create a new room assignment
 // POST - localhost:3000/room-assignments/
@@ -72,7 +73,7 @@ const getAllRoomAssignments = async (req, response) => {
         const allRoomAssignments = await RoomAssignment.find({ user: req.user._id})
         .select('-user')
         .populate('room', 'monthlyRentalPrice content name')
-        .populate('occupant', 'firstName lastName email phone');
+        .populate('occupant', 'firstName lastName email phoneNumber');
 
         // Send request response
         response.status(200).json({
@@ -94,8 +95,8 @@ const getRoomAssignmentById = async (req, response) => {
         // Find all room assignments by user and id
         const roomAssignment = await RoomAssignment.findOne({ _id: req.params.id, user: req.user._id })
         .select('-user')
-        .populate('room', 'monthlyRentalPrice content')
-        .populate('occupant', 'firstName lastName email phone');
+        .populate('room', 'monthlyRentalPrice content, name')
+        .populate('occupant', 'firstName lastName email phoneNumber');
 
         // Send request response
         response.status(200).json({
