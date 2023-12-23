@@ -20,7 +20,7 @@ router.get('/', authMiddleware, getAllRoomAssignments);
 // GET localhost:3000/room-assignments/:id
 router.get('/:id', authMiddleware, getRoomAssignmentById);
 
-// PUT localhost:3000/room-assignments/:id
+// PATCH localhost:3000/room-assignments/:id
 router.patch('/:id', authMiddleware, updateRoomAssignmentById);
 
 
