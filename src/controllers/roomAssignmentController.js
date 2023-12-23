@@ -112,21 +112,21 @@ const getRoomAssignmentById = async (req, response) => {
 }
 
 // Update a room assignment by id
-// PUT localhost:3000/room-assignments/:id
+// PATCH localhost:3000/room-assignments/:id
 const updateRoomAssignmentById = async (req, response) => {
     try {
         // Find room assignment by user and id
-        const roomAssignment = await RoomAssignment.findOneAndUpdate(
-            { _id: req.params.id, user: req.user._id },
-            { $set: req.body },
-            { new: true, runValidators: true, setDefaultsOnInsert: true }
-        ).select('-user');
+        const roomAssignment = await RoomAssignment.findOne({ _id: req.params.id, user: req.user._id });
 
         // Error handle for non existing room assignment
         if (!roomAssignment) {
             return response.status(404).json({ message: "Room assignment not found" });
         }
-
+        
+        // Update the room assignment
+        roomAssignment.set(req.body);
+        await roomAssignment.save();
+        
         // Send request respond
         response.status(200).json({
             message: "Successfully updated the room assignment",
