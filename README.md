@@ -4,9 +4,9 @@
 
 ## Overview
 
-Sub.club is a web application that addresses Victoria's housing challenges by providing a streamlined solution for those looking to share their home by subletting. 
+Sub.club is a web application that addresses the challenges of housing in Victoria by providing a streamlined solution for those wishing to share their housing through subletting. 
 
-The server side of this application provides the user with a way to simplify the management of all the information that comes with the subletting process, such as storing and managing occupants (tenant), rooms, agreements, payment information records, all in one place.
+This application server provides the user with a way to simplify the management of all the information involved in the subletting process, such as the storage and management of occupants (tenants), rooms, agreements, payment information records, all in one place.
 
 ## Main features:
 
@@ -15,6 +15,9 @@ The server side of this application provides the user with a way to simplify the
 
 - Create a user account
 - Login authentication with JWT
+- Update user profile details
+- View user profile
+- Delete user account
 
 #### Rooms:
 
