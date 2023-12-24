@@ -90,7 +90,7 @@ To use the production application, please visit [The SubClub App](https://thesub
 ```bash
     DB_URI=YourMongoDBAtlasConnectionStringHere
 
-    PORT=3030
+    PORT=3030 # or any other different to the one used by the client if using together 
 
     JWT_KEY=YourSecretKeyHere
 ```
@@ -109,8 +109,15 @@ To use the production application, please visit [The SubClub App](https://thesub
     - Step 1: Open Postman.
     - Step 2: Click on the "New" button to create a new request.
     - Step 3: Set Request Details
-    - Step 4:  Send the Request
+    - Step 4: Send the Request
     - Step 5: Review the Response
+
+7. **Add authentication**
+
+    After create an account and login, add your token on the header section of each request. 
+    
+    *Place your token on the header like this:*
+    ![set authentication](./readme-img/Add-token-to-headers.png)
 
 
 You have successfully set up and run the SubClub backend server locally with MongoDB Atlas. Explore the features and enjoy using the application!
@@ -148,6 +155,111 @@ _____
 
 
 ## Screenshot of how to use the server with POSTMAN
+
+### Create and account successfully
+
+![Create an account](./readme-img/POST-user-succesfull-signup.png)
+
+### Signup - email validation
+
+![Validate user email](./readme-img/POST-user-signup-email-validation.png)
+
+### Signup - password validation
+
+![Validate user password](./readme-img/POST-user-signup-password-validation.png)
+
+
+### Signup - required input
+![validate require fields](./readme-img/POST-user-validate-required-fields.png)
+
+
+### Login successfully
+
+![Login succesfully](./readme-img/POST-Auth-user-succesfull-logIn.png)
+
+### Update user profile
+
+![Update user profile](./readme-img/PATCH-update-user-profile.png)
+
+### View user profile
+
+![View user profile](./readme-img/GET-view-user-profile.png)
+
+### Delete user account
+
+![Delete user account](./readme-img/DELETE-user-account.png)
+
+
+
+### View all rooms
+
+![View all rooms](./readme-img/GET-all-rooms.png)
+
+### View room  by id
+
+![View room by id](./readme-img/GET-view-room-by-ID.png)
+
+### Update room by id
+
+![Update room by id](./readme-img/PATCH-update-room-by-id.png)
+
+### Delete room by id
+![Delete room by id](./readme-img/DELETE-room-by-ID.png)
+
+
+### View all occupants
+
+![View all occupants](./readme-img/GET-all-occupants.png)
+
+### View occupant by id
+
+![View occupant by id](./readme-img/GET-occupant-by-ID.png)
+
+### Update occupant by id
+
+![Update occupant by id](./readme-img/PATCH-update-occupant-by-ID.png)
+
+### Delete occupant by id
+![Delete occupant by id](./readme-img/DELETE-occupant-by-ID.png)
+
+
+### View all room assignments
+
+![View all room assignments](./readme-img/GET-all-room-assignments.png)
+
+### View room assignments by id
+
+![View room assignment by id](./readme-img/GET-room-assignment-by-ID.png)
+
+### Update room assignments by id
+
+![Update room assignment by id](./readme-img/PATCH-update-room-assignment-by-ID.png)
+
+### Cancel room assignments by id
+![Cancel room assignment by id](./readme-img/PATCH-cancel-room-assignment.png)
+
+
+### View all payment records
+
+![View all payment records](./readme-img/GET-view-all-payment-records.png)
+
+### View payment records by id
+
+![View payment record by id](./readme-img/GET-view-payment-record-by-ID.png)
+
+
+### Cancel payment records by id
+![Cancel payment record by id](./readme-img/PATCH-cancel-payment-record.png)
+
+
+
+
+
+
+
+
+
+
 
 ## Backend Libraries & Dependencies:
 
