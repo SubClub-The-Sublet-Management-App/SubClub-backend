@@ -252,15 +252,53 @@ _____
 ![Cancel payment record by id](./readme-img/PATCH-cancel-payment-record.png)
 
 
-
-
-
-
-
-
-
-
-
 ## Backend Libraries & Dependencies:
 
 ### Production Dependencies:
+
+1. **bcryptjs:**
+   - Description: A library for hashing passwords.
+   - Usage: Used for securely hashing passwords before storing them in the database.
+
+2. **cors:**
+   - Description: Middleware for enabling Cross-Origin Resource Sharing (CORS) in Express.
+   - Usage: Allows the backend to handle requests from different origins, especially useful for frontend apps.
+
+3. **dotenv:**
+   - Description: Loads environment variables from a `.env` file into `process.env`.
+   - Usage: Helps manage environment-specific configuration, such as database connection strings and API keys.
+
+4. **express:**
+   - Description: A fast, unopinionated, minimalist web framework for Node.js.
+   - Usage: The core framework for building the backend API, handling routes, requests, and responses.
+
+5. **jsonwebtoken:**
+   - Description: Implementation of JSON Web Tokens (JWT) for authentication.
+   - Usage: Generates and validates JWTs for secure user authentication in the backend.
+
+6. **mongoose:**
+   - Description: MongoDB object modeling tool designed to work in an asynchronous environment.
+   - Usage: Simplifies interaction with MongoDB databases by providing a schema-based solution for data modeling.
+
+7. **validator:**
+   - Description: Library for string validation and sanitization.
+   - Usage: Useful for validating and sanitizing user input or other data to ensure it meets specific criteria.
+
+### Development Dependencies:
+
+1. **jest:**
+   - Description: JavaScript testing framework.
+   - Usage: Used for writing and running unit tests and assertions for the backend codebase.
+
+2. **jest-coverage-badge:**
+   - Description: Generates coverage badges for Jest tests.
+   - Usage: Creates badges reflecting the test coverage percentage, useful for display in the project repository.
+
+3. **sinon:**
+   - Description: Standalone test spies, stubs, and mocks for JavaScript.
+   - Usage: Enhances testing by providing tools for creating spies, stubs, and mocks in unit tests.
+
+4. **supertest:**
+   - Description: Library for testing HTTP assertions.
+   - Usage: Enables testing of HTTP requests and responses in an Express app, particularly useful for integration testing.
+
