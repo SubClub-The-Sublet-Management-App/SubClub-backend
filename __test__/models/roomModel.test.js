@@ -30,7 +30,7 @@ describe('Room Model Test', () => {
     // Test for valid data
     it('create & save room successfully', async () => {
         const roomData = {
-            name: 'Room 1',
+            name: 'Room TEST 001',
             monthlyRentalPrice: 500,
             description: 'A cozy room',
             content: ['Bed', 'Table', 'Chair'],
